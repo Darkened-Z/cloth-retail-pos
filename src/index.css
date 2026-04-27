@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+    --ring: 45 100% 50%;
+  }
+
+  * {
+    border-color: #000;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: #ffb800;
+    color: #000;
+  }
+
+  /* Tabular numerals across all monospace contexts */
+  .font-mono,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .sharp {
+    border-radius: 0 !important;
+  }
+
+  .brutal-press {
+    transition: transform 80ms ease, box-shadow 80ms ease;
+  }
+  .brutal-press:active {
+    transform: translate(4px, 4px);
+    box-shadow: none !important;
+  }
+}
