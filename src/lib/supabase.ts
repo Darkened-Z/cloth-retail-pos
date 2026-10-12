@@ -3,7 +3,8 @@ export const DEFAULT_SUPABASE_KEY =
   'sb_publishable_NMhJyVPotWBRvNJwwfPgDw_ScivEuvp';
 
 export const DEFAULT_SUPABASE_URL =
-  (import.meta as any).env?.VITE_SUPABASE_URL || '';
+  (import.meta as any).env?.VITE_SUPABASE_URL ||
+  'https://zgtdjwjscffsipknmtua.supabase.co';
 
 export const SYNCED_KEYS = [
   'shop',
@@ -46,7 +47,7 @@ export function getSupabaseConfig(): SupabaseConfig {
     if (raw) {
       const parsed = JSON.parse(raw);
       return {
-        url: (parsed.url ?? DEFAULT_SUPABASE_URL).trim().replace(/\/+$/, ''),
+        url: (parsed.url || DEFAULT_SUPABASE_URL).trim().replace(/\/+$/, ''),
         apiKey: (parsed.apiKey || DEFAULT_SUPABASE_KEY).trim(),
         autoSync: parsed.autoSync !== false,
       };
@@ -274,4 +275,25 @@ export async function importBackupJson(data: Record<string, unknown>): Promise<{
     syncedToCloud = res.ok;
   }
   return { count, syncedToCloud };
+}
+
+/**
+ * Bootstrap sync on app startup:
+ * - If cloud table has data and this device hasn't synced yet, pull from cloud and reload.
+ * - If cloud table exists and is empty, push local seeded data up to cloud.
+ */
+export async function initSupabaseSync(): Promise<void> {
+  if (!isSupabaseConfigured()) return;
+  try {
+    const alreadySynced = Boolean(getLastSyncTime());
+    const pulled = await pullAllFromSupabase();
+    if (!pulled.ok) return;
+    if (pulled.count === 0) {
+      await pushAllToSupabase();
+    } else if (!alreadySynced) {
+      window.location.reload();
+    }
+  } catch {
+    // ignore background bootstrap errors
+  }
 }

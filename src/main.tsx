@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
 import { seedAll } from './mock';
+import { initSupabaseSync } from './lib/supabase';
 import './index.css';
 
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
@@ -24,6 +25,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
 }
 
 try { seedAll(); } catch (e) { console.error('seedAll failed:', e); }
+void initSupabaseSync();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
