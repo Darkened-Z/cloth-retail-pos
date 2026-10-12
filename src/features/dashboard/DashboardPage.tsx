@@ -204,67 +204,60 @@ export function DashboardPage() {
     }));
   }, [filteredExpenses, accounts]);
 
-  // ERPNext-style Top Quick Shortcut Pills with Live Status Badges
+  // Clean, high-readability Quick Access Cards (no cluttered multi-word badges or truncated labels)
   const workspaceShortcuts = [
     {
-      label: 'Sales Invoice',
-      path: '/sales',
-      badge: `${invoices.length} Invoices`,
-      dotColor: 'bg-slate-600',
-    },
-    {
-      label: 'New POS Bill',
+      label: 'New Sales Bill (POS)',
+      sub: 'Press N',
       path: '/sales/new',
-      badge: 'Quick Entry (N)',
-      dotColor: 'bg-blue-600',
+      primary: true,
     },
     {
-      label: 'Dyeing Voucher',
-      path: '/dyeing',
-      badge: `${dyeings.length} In Progress`,
-      dotColor: 'bg-amber-500',
+      label: 'Sales Invoices',
+      sub: `${invoices.length}`,
+      path: '/sales',
     },
     {
-      label: 'Item & Fabric',
-      path: '/items',
-      badge: `${items.length} Print Items`,
-      dotColor: 'bg-emerald-600',
-    },
-    {
-      label: 'Pretreatment / Dyeing',
+      label: 'New Dyeing Order',
+      sub: 'Press D',
       path: '/dyeing/new',
-      badge: 'New Order (D)',
-      dotColor: 'bg-purple-600',
+      primary: true,
     },
     {
-      label: 'Purchase Order',
+      label: 'Dyeing Vouchers',
+      sub: `${dyeings.length}`,
+      path: '/dyeing',
+    },
+    {
+      label: 'Purchase Orders',
+      sub: `${purchases.length}`,
       path: '/purchase',
-      badge: `${purchases.length} Vouchers`,
-      dotColor: 'bg-slate-600',
     },
     {
-      label: 'Receipt & Payment',
-      path: '/vouchers/receipt-payment',
-      badge: `${receipts.length + payments.length} Posted`,
-      dotColor: 'bg-blue-600',
+      label: 'Items & Fabric Stock',
+      sub: `${items.length}`,
+      path: '/items',
     },
     {
-      label: 'Customer',
+      label: 'Customers',
+      sub: `${customers.length}`,
       path: '/customers',
-      badge: `${customers.length} Enabled`,
-      dotColor: 'bg-emerald-600',
     },
     {
       label: 'Suppliers & Dyers',
+      sub: `${suppliers.length}`,
       path: '/suppliers',
-      badge: `${suppliers.length} Active`,
-      dotColor: 'bg-amber-500',
+    },
+    {
+      label: 'Receipt & Payment',
+      sub: `${receipts.length + payments.length}`,
+      path: '/vouchers/receipt-payment',
     },
     {
       label: 'Stock Transfer',
+      sub: lowStockCount > 0 ? `${lowStockCount} Low` : 'Move',
       path: '/stock-transfer',
-      badge: lowStockCount > 0 ? `${lowStockCount} Low Stock` : 'In Stock',
-      dotColor: lowStockCount > 0 ? 'bg-red-500' : 'bg-slate-600',
+      alert: lowStockCount > 0,
     },
   ];
 
@@ -318,24 +311,24 @@ export function DashboardPage() {
   return (
     <div className="p-3 sm:p-5">
       {/* Main ERPNext Workspace Card Container */}
-      <div className="bg-white border border-slate-200/90 rounded-xl shadow-sm p-4 sm:p-6 space-y-8">
+      <div className="bg-white border border-slate-300 rounded-xl shadow-sm p-4 sm:p-6 space-y-8">
         {/* 1. Workspace Title + Quick Shortcut Pills Grid */}
         <section>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <h2 className="text-lg font-semibold text-slate-900">Fabric Retail & Printing</h2>
+            <h2 className="text-lg font-bold text-slate-900">Fabric Retail & Printing</h2>
 
             {/* Period Filter Pills */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <div className="inline-flex bg-slate-100 border border-slate-200 rounded-lg p-0.5">
+              <div className="inline-flex bg-slate-100 border border-slate-300 rounded-lg p-0.5">
                 {(['today', 'week', 'month', 'year', 'custom'] as Range[]).map(r => (
                   <button
                     key={r}
                     type="button"
                     onClick={() => setRange(r)}
-                    className={`px-2.5 py-1 text-xs font-medium capitalize rounded-md transition-colors ${
+                    className={`px-3 py-1 text-xs font-semibold capitalize rounded-md transition-colors ${
                       range === r
-                        ? 'bg-white text-slate-900 shadow-sm font-semibold'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-slate-900 text-white shadow-sm'
+                        : 'text-slate-700 hover:text-slate-900'
                     }`}
                   >
                     {r}
@@ -350,7 +343,7 @@ export function DashboardPage() {
                     onChange={e => setFromDate(e.target.value)}
                     className="border border-slate-300 rounded-md px-2 py-1 text-xs"
                   />
-                  <span className="text-xs text-slate-400">to</span>
+                  <span className="text-xs text-slate-600">to</span>
                   <input
                     type="date"
                     value={toDate}
@@ -362,21 +355,36 @@ export function DashboardPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {workspaceShortcuts.map(sc => (
               <button
                 key={sc.label}
                 type="button"
                 onClick={() => navigate({ to: sc.path as string })}
-                className="group border border-slate-200/90 hover:border-slate-300 bg-white hover:bg-slate-50/60 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 text-left transition-all shadow-[0_1px_2px_rgba(15,23,42,0.03)]"
+                className={`group rounded-lg px-4 py-3.5 flex items-center justify-between gap-2 text-left transition-all shadow-sm border ${
+                  sc.primary
+                    ? 'bg-blue-600 hover:bg-blue-700 border-blue-700 text-white'
+                    : 'bg-slate-50/80 hover:bg-slate-100 border-slate-300 text-slate-900 hover:border-slate-400'
+                }`}
               >
-                <span className="text-sm font-medium text-slate-800 group-hover:text-blue-600 flex items-center gap-1 truncate transition-colors">
-                  <span className="truncate">{sc.label}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span className="text-[14.5px] font-semibold leading-snug flex items-center gap-1.5">
+                  <span>{sc.label}</span>
+                  <ArrowUpRight
+                    className={`w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
+                      sc.primary ? 'text-blue-100' : 'text-slate-500 group-hover:text-slate-900'
+                    }`}
+                  />
                 </span>
-                <span className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 rounded-md px-2 py-0.5 text-[11px] font-medium shrink-0">
-                  <span className={`w-1.5 h-1.5 rounded-full ${sc.dotColor}`} />
-                  <span>{sc.badge}</span>
+                <span
+                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-mono font-bold shrink-0 ${
+                    sc.primary
+                      ? 'bg-blue-800/80 text-white'
+                      : sc.alert
+                      ? 'bg-red-100 text-red-800 border border-red-300'
+                      : 'bg-white text-slate-800 border border-slate-300'
+                  }`}
+                >
+                  {sc.sub}
                 </span>
               </button>
             ))}

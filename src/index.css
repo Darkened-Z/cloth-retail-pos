@@ -49,35 +49,40 @@
 
   /* High-readability typography scale */
   .text-xs {
-    font-size: 0.8125rem !important; /* 13px */
+    font-size: 0.84375rem !important; /* 13.5px */
     line-height: 1.45 !important;
   }
 
   .text-\[10px\],
   .text-\[11px\] {
-    font-size: 0.75rem !important; /* 12px */
+    font-size: 0.78125rem !important; /* 12.5px */
     line-height: 1.4 !important;
-    font-weight: 500;
+    font-weight: 600;
   }
 
-  /* Balanced slate contrast for secondary labels */
-  .text-gray-400 {
-    color: #64748b !important;
-  }
-  .text-gray-500 {
+  /* Strong contrast for secondary labels */
+  .text-gray-400,
+  .text-slate-400 {
     color: #475569 !important;
   }
-  .text-gray-600 {
+  .text-gray-500,
+  .text-slate-500 {
     color: #334155 !important;
   }
+  .text-gray-600,
+  .text-slate-600 {
+    color: #1e293b !important;
+  }
 
-  /* ERPNext / Frappe Soft Borders & Rounded Surfaces */
+  /* ERPNext / Frappe Crisp Borders & Rounded Surfaces */
   .border-black,
   .border-black\/10,
   .border-black\/15,
   .border-black\/20,
-  .border-black\/30 {
-    border-color: #e2e8f0 !important;
+  .border-black\/30,
+  .border-slate-200,
+  .border-slate-200\/90 {
+    border-color: #cbd5e1 !important;
   }
 
   .divide-black > :not([hidden]) ~ :not([hidden]),
