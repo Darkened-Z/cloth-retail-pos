@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useSales } from '@/stores/useSales';
+import { useInvoices } from '@/stores/useInvoices';
 import { useParties } from '@/stores/useParties';
 import { useExpenses } from '@/stores/useExpenses';
 import { useItems } from '@/stores/useItems';
@@ -8,7 +8,8 @@ import { useCoa } from '@/stores/useCoa';
 import { useVouchers } from '@/stores/useVouchers';
 import { usePurchase } from '@/stores/usePurchase';
 import { useDyeing } from '@/stores/useDyeing';
-import { formatPKR, formatDate, todayISO } from '@/lib/format';
+import { formatPKR } from '@/lib/formatNumber';
+import { formatDate, todayISO } from '@/lib/formatDate';
 import { useKeyboardShortcuts } from '@/lib/shortcuts';
 import { ArrowUpRight, FileText, MoreHorizontal } from 'lucide-react';
 import {
@@ -43,7 +44,7 @@ function shortPartyName(name: string): string {
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const { invoices } = useSales();
+  const { invoices } = useInvoices();
   const { parties } = useParties();
   const { expenses } = useExpenses();
   const { items } = useItems();
@@ -106,16 +107,16 @@ export function DashboardPage() {
       .filter(i => i.date === today)
       .reduce((s, i) => s + (i.paid ?? 0), 0);
     const todayReceipts = receipts
-      .filter(r => r.date === today && (r.mode === 'cash' || r.accountId === 'A410'))
+      .filter(r => r.date === today && r.receivedIn === 'cash')
       .reduce((s, r) => s + r.amount, 0);
     const todayPurchasesPaid = purchases
       .filter(p => p.date === today)
       .reduce((s, p) => s + (p.paid ?? 0), 0);
     const todayExpenses = expenses
-      .filter(e => e.date === today)
+      .filter(e => e.date === today && e.paidFrom === 'cash')
       .reduce((s, e) => s + e.amount, 0);
     const todayPayments = payments
-      .filter(p => p.date === today && (p.mode === 'cash' || p.accountId === 'A410'))
+      .filter(p => p.date === today && p.paidFrom === 'cash')
       .reduce((s, p) => s + p.amount, 0);
 
     return (
