@@ -204,67 +204,100 @@ export function DashboardPage() {
     }));
   }, [filteredExpenses, accounts]);
 
-  // Clean, high-readability Quick Access Cards (no cluttered multi-word badges or truncated labels)
+  // Clean, high-readability Quick Access Cards with graph-matched accent colors
   const workspaceShortcuts = [
     {
       label: 'New Sales Bill (POS)',
       sub: 'Press N',
       path: '/sales/new',
-      primary: true,
+      accentBorder: 'border-l-4 border-l-blue-600',
+      badgeClass: 'bg-blue-100 text-blue-800 border-blue-200',
+      cardBg: 'bg-blue-50/40 hover:bg-blue-50/80',
     },
     {
       label: 'Sales Invoices',
       sub: `${invoices.length}`,
       path: '/sales',
+      accentBorder: 'border-l-4 border-l-amber-500',
+      badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+      cardBg: 'bg-white hover:bg-amber-50/30',
     },
     {
       label: 'New Dyeing Order',
       sub: 'Press D',
       path: '/dyeing/new',
-      primary: true,
+      accentBorder: 'border-l-4 border-l-violet-600',
+      badgeClass: 'bg-violet-100 text-violet-800 border-violet-200',
+      cardBg: 'bg-violet-50/40 hover:bg-violet-50/80',
     },
     {
       label: 'Dyeing Vouchers',
       sub: `${dyeings.length}`,
       path: '/dyeing',
+      accentBorder: 'border-l-4 border-l-purple-500',
+      badgeClass: 'bg-purple-50 text-purple-800 border-purple-200',
+      cardBg: 'bg-white hover:bg-purple-50/30',
     },
     {
       label: 'Purchase Orders',
       sub: `${purchases.length}`,
       path: '/purchase',
+      accentBorder: 'border-l-4 border-l-cyan-500',
+      badgeClass: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+      cardBg: 'bg-white hover:bg-cyan-50/30',
     },
     {
       label: 'Items & Fabric Stock',
       sub: `${items.length}`,
       path: '/items',
+      accentBorder: 'border-l-4 border-l-emerald-500',
+      badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      cardBg: 'bg-white hover:bg-emerald-50/30',
     },
     {
       label: 'Customers',
       sub: `${customers.length}`,
       path: '/customers',
+      accentBorder: 'border-l-4 border-l-rose-500',
+      badgeClass: 'bg-rose-50 text-rose-800 border-rose-200',
+      cardBg: 'bg-white hover:bg-rose-50/30',
     },
     {
       label: 'Suppliers & Dyers',
       sub: `${suppliers.length}`,
       path: '/suppliers',
+      accentBorder: 'border-l-4 border-l-orange-500',
+      badgeClass: 'bg-orange-50 text-orange-800 border-orange-200',
+      cardBg: 'bg-white hover:bg-orange-50/30',
     },
     {
       label: 'Receipt & Payment',
       sub: `${receipts.length + payments.length}`,
       path: '/vouchers/receipt-payment',
+      accentBorder: 'border-l-4 border-l-teal-500',
+      badgeClass: 'bg-teal-50 text-teal-800 border-teal-200',
+      cardBg: 'bg-white hover:bg-teal-50/30',
     },
     {
       label: 'Stock Transfer',
       sub: lowStockCount > 0 ? `${lowStockCount} Low` : 'Move',
       path: '/stock-transfer',
-      alert: lowStockCount > 0,
+      accentBorder: lowStockCount > 0 ? 'border-l-4 border-l-red-500' : 'border-l-4 border-l-indigo-500',
+      badgeClass:
+        lowStockCount > 0
+          ? 'bg-red-100 text-red-800 border-red-300'
+          : 'bg-indigo-50 text-indigo-800 border-indigo-200',
+      cardBg: 'bg-white hover:bg-indigo-50/30',
     },
   ];
 
-  // ERPNext-style Categorized Document & Master Lists
+  // ERPNext-style Categorized Document & Master Lists with subtle color accents
   const documentGroups = [
     {
       title: 'Selling & POS',
+      iconBg: 'bg-blue-50 text-blue-600',
+      dotBg: 'bg-blue-50',
+      dotColor: 'bg-blue-600',
       items: [
         { label: 'New Sales Invoice', path: '/sales/new', primary: true },
         { label: 'Sales Invoice List', path: '/sales' },
@@ -275,6 +308,9 @@ export function DashboardPage() {
     },
     {
       title: 'Dyeing & Buying',
+      iconBg: 'bg-violet-50 text-violet-600',
+      dotBg: 'bg-violet-50',
+      dotColor: 'bg-violet-600',
       items: [
         { label: 'New Dyeing Voucher', path: '/dyeing/new', primary: true },
         { label: 'Dyeing Voucher List', path: '/dyeing' },
@@ -285,6 +321,9 @@ export function DashboardPage() {
     },
     {
       title: 'Stock & HR',
+      iconBg: 'bg-emerald-50 text-emerald-600',
+      dotBg: 'bg-emerald-50',
+      dotColor: 'bg-emerald-600',
       items: [
         { label: 'Items & Fabric Stock', path: '/items', primary: true },
         { label: 'Stock Transfer', path: '/stock-transfer' },
@@ -296,6 +335,9 @@ export function DashboardPage() {
     },
     {
       title: 'Reports & Accounts',
+      iconBg: 'bg-amber-50 text-amber-600',
+      dotBg: 'bg-amber-50',
+      dotColor: 'bg-amber-500',
       items: [
         { label: 'Day Book Summary', path: '/reports/daybook', primary: true },
         { label: 'Cash Book', path: '/reports/cashbook' },
@@ -327,7 +369,7 @@ export function DashboardPage() {
                     onClick={() => setRange(r)}
                     className={`px-3 py-1 text-xs font-semibold capitalize rounded-md transition-colors ${
                       range === r
-                        ? 'bg-slate-900 text-white shadow-sm'
+                        ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-700 hover:text-slate-900'
                     }`}
                   >
@@ -361,28 +403,14 @@ export function DashboardPage() {
                 key={sc.label}
                 type="button"
                 onClick={() => navigate({ to: sc.path as string })}
-                className={`group rounded-lg px-4 py-3.5 flex items-center justify-between gap-2 text-left transition-all shadow-sm border ${
-                  sc.primary
-                    ? 'bg-blue-600 hover:bg-blue-700 border-blue-700 text-white'
-                    : 'bg-slate-50/80 hover:bg-slate-100 border-slate-300 text-slate-900 hover:border-slate-400'
-                }`}
+                className={`group rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 text-left transition-all shadow-sm border border-slate-300 text-slate-900 ${sc.accentBorder} ${sc.cardBg}`}
               >
-                <span className="text-[14.5px] font-semibold leading-snug flex items-center gap-1.5">
+                <span className="text-[14px] font-semibold leading-snug flex items-center gap-1">
                   <span>{sc.label}</span>
-                  <ArrowUpRight
-                    className={`w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
-                      sc.primary ? 'text-blue-100' : 'text-slate-500 group-hover:text-slate-900'
-                    }`}
-                  />
+                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-slate-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
                 <span
-                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-mono font-bold shrink-0 ${
-                    sc.primary
-                      ? 'bg-blue-800/80 text-white'
-                      : sc.alert
-                      ? 'bg-red-100 text-red-800 border border-red-300'
-                      : 'bg-white text-slate-800 border border-slate-300'
-                  }`}
+                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-mono font-bold shrink-0 border ${sc.badgeClass}`}
                 >
                   {sc.sub}
                 </span>
@@ -395,64 +423,64 @@ export function DashboardPage() {
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
           <div
             onClick={() => navigate({ to: '/sales' })}
-            className="cursor-pointer border border-slate-200/90 hover:border-slate-300 rounded-xl p-4 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-all"
+            className="cursor-pointer border border-slate-300 border-t-4 border-t-amber-500 rounded-xl p-4 bg-gradient-to-b from-amber-50/35 to-white hover:shadow-md transition-all"
           >
-            <div className="flex items-center justify-between text-xs font-medium text-slate-600">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
               <span>Sales Orders ({range})</span>
               <MoreHorizontal className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-3 text-xl sm:text-2xl font-bold text-amber-500 tabular">
+            <div className="mt-2.5 text-xl sm:text-2xl font-bold text-amber-600 tabular">
               {formatPKR(salesTotal)}
             </div>
-            <div className="mt-1 text-xs text-slate-400">
+            <div className="mt-1.5 inline-flex items-center rounded bg-amber-100/80 text-amber-800 px-2 py-0.5 text-xs font-medium">
               {filteredInvoices.length} invoices billed
             </div>
           </div>
 
           <div
             onClick={() => navigate({ to: '/reports/cashbook' })}
-            className="cursor-pointer border border-slate-200/90 hover:border-slate-300 rounded-xl p-4 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-all"
+            className="cursor-pointer border border-slate-300 border-t-4 border-t-purple-600 rounded-xl p-4 bg-gradient-to-b from-purple-50/35 to-white hover:shadow-md transition-all"
           >
-            <div className="flex items-center justify-between text-xs font-medium text-slate-600">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
               <span>Cash in Hand (Live)</span>
               <MoreHorizontal className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-3 text-xl sm:text-2xl font-bold text-purple-600 tabular">
+            <div className="mt-2.5 text-xl sm:text-2xl font-bold text-purple-600 tabular">
               {formatPKR(cashAccount)}
             </div>
-            <div className="mt-1 text-xs text-slate-400">
+            <div className="mt-1.5 inline-flex items-center rounded bg-purple-100/80 text-purple-800 px-2 py-0.5 text-xs font-medium">
               Account A410 · Shop Counter
             </div>
           </div>
 
           <div
             onClick={() => navigate({ to: '/customers' })}
-            className="cursor-pointer border border-slate-200/90 hover:border-slate-300 rounded-xl p-4 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-all"
+            className="cursor-pointer border border-slate-300 border-t-4 border-t-blue-600 rounded-xl p-4 bg-gradient-to-b from-blue-50/35 to-white hover:shadow-md transition-all"
           >
-            <div className="flex items-center justify-between text-xs font-medium text-slate-600">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
               <span>Customer Receivables</span>
               <MoreHorizontal className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-3 text-xl sm:text-2xl font-bold text-blue-600 tabular">
+            <div className="mt-2.5 text-xl sm:text-2xl font-bold text-blue-600 tabular">
               {formatPKR(receivables)}
             </div>
-            <div className="mt-1 text-xs text-slate-400">
+            <div className="mt-1.5 inline-flex items-center rounded bg-blue-100/80 text-blue-800 px-2 py-0.5 text-xs font-medium">
               {customers.length} active customers
             </div>
           </div>
 
           <div
             onClick={() => navigate({ to: '/suppliers' })}
-            className="cursor-pointer border border-slate-200/90 hover:border-slate-300 rounded-xl p-4 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-all"
+            className="cursor-pointer border border-slate-300 border-t-4 border-t-orange-500 rounded-xl p-4 bg-gradient-to-b from-orange-50/35 to-white hover:shadow-md transition-all"
           >
-            <div className="flex items-center justify-between text-xs font-medium text-slate-600">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
               <span>Supplier & Dyer Dues</span>
               <MoreHorizontal className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-3 text-xl sm:text-2xl font-bold text-orange-600 tabular">
+            <div className="mt-2.5 text-xl sm:text-2xl font-bold text-orange-600 tabular">
               {formatPKR(payables)}
             </div>
-            <div className="mt-1 text-xs text-slate-400">
+            <div className="mt-1.5 inline-flex items-center rounded bg-orange-100/80 text-orange-800 px-2 py-0.5 text-xs font-medium">
               {suppliers.length} suppliers & dyers
             </div>
           </div>
@@ -460,17 +488,19 @@ export function DashboardPage() {
 
         {/* 3. ERPNext Categorized Documents & Reports Directory */}
         <section>
-          <h3 className="text-base font-semibold text-slate-900 mb-3.5">
+          <h3 className="text-base font-bold text-slate-900 mb-3.5">
             Fabric Retail & Accounting Documents
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {documentGroups.map(group => (
               <div
                 key={group.title}
-                className="border border-slate-200/90 rounded-xl p-4 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.03)]"
+                className="border border-slate-300 rounded-xl p-4 bg-white shadow-sm"
               >
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900 pb-3 mb-2 border-b border-slate-100">
-                  <FileText className="w-4 h-4 text-slate-500" />
+                <div className="flex items-center gap-2.5 text-sm font-bold text-slate-900 pb-3 mb-2.5 border-b border-slate-200">
+                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${group.iconBg}`}>
+                    <FileText className="w-4 h-4" />
+                  </span>
                   <span>{group.title}</span>
                 </div>
                 <ul className="space-y-2">
@@ -479,16 +509,16 @@ export function DashboardPage() {
                       <button
                         type="button"
                         onClick={() => navigate({ to: item.path as string })}
-                        className="w-full text-left text-[13.5px] text-slate-700 hover:text-blue-600 flex items-center gap-2.5 py-0.5 group transition-colors"
+                        className="w-full text-left text-[13.5px] font-medium text-slate-700 hover:text-blue-600 flex items-center gap-2.5 py-0.5 group transition-colors"
                       >
                         <span
                           className={`w-4 h-4 rounded flex items-center justify-center shrink-0 ${
-                            item.primary ? 'bg-amber-50' : 'bg-slate-100'
+                            item.primary ? group.dotBg : 'bg-slate-100'
                           }`}
                         >
                           <span
                             className={`w-1.5 h-1.5 rounded-full ${
-                              item.primary ? 'bg-amber-500' : 'bg-slate-500'
+                              item.primary ? group.dotColor : 'bg-slate-500'
                             }`}
                           />
                         </span>

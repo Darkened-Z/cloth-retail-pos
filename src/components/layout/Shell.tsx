@@ -73,6 +73,8 @@ interface SidebarModule {
   id: string;
   label: string;
   icon: any;
+  color: string;
+  bgColor: string;
   defaultPath: string;
   children?: { label: string; path: string }[];
 }
@@ -82,12 +84,16 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'workspace',
     label: 'Dashboard',
     icon: Home,
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
     defaultPath: '/',
   },
   {
     id: 'dyeing',
     label: 'Fabric Pretreatment',
     icon: FileCheck2,
+    color: 'text-violet-600',
+    bgColor: 'bg-violet-50',
     defaultPath: '/dyeing',
     children: [
       { label: 'Dyeing Vouchers', path: '/dyeing' },
@@ -99,6 +105,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'accounting',
     label: 'Accounting',
     icon: BookOpen,
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-50',
     defaultPath: '/coa',
     children: [
       { label: 'Chart of Accounts', path: '/coa' },
@@ -111,6 +119,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'selling',
     label: 'Selling',
     icon: Tag,
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-50',
     defaultPath: '/sales',
     children: [
       { label: 'Sales Invoices', path: '/sales' },
@@ -123,6 +133,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'buying',
     label: 'Buying',
     icon: ShoppingBag,
+    color: 'text-cyan-600',
+    bgColor: 'bg-cyan-50',
     defaultPath: '/purchase',
     children: [
       { label: 'Purchase Vouchers', path: '/purchase' },
@@ -134,6 +146,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'stock',
     label: 'Stock',
     icon: Package,
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-50',
     defaultPath: '/items',
     children: [
       { label: 'Items & Fabrics', path: '/items' },
@@ -146,6 +160,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'crm',
     label: 'CRM & Parties',
     icon: MessageSquare,
+    color: 'text-rose-600',
+    bgColor: 'bg-rose-50',
     defaultPath: '/customers',
     children: [
       { label: 'Customers Directory', path: '/customers' },
@@ -157,6 +173,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'hr',
     label: 'HR & Payroll',
     icon: UserCheck,
+    color: 'text-teal-600',
+    bgColor: 'bg-teal-50',
     defaultPath: '/employees',
     children: [
       { label: 'Employees & Advances', path: '/employees' },
@@ -168,6 +186,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'reports',
     label: 'Reports',
     icon: BarChart3,
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
     defaultPath: '/reports/daybook',
     children: [
       { label: 'Day Book', path: '/reports/daybook' },
@@ -184,6 +204,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     id: 'settings',
     label: 'Settings',
     icon: Settings,
+    color: 'text-slate-600',
+    bgColor: 'bg-slate-100',
     defaultPath: '/settings',
     children: [
       { label: 'Shop Settings & Backup', path: '/settings' },
@@ -455,17 +477,17 @@ export function Shell() {
           <button
             type="button"
             onClick={() => navigate({ to: '/sales/new' })}
-            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 shadow-sm transition-colors"
+            className="px-3 py-1.5 rounded-lg border border-blue-200 bg-blue-50/90 hover:bg-blue-100 text-blue-700 text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
           >
-            <Plus className="w-3.5 h-3.5 text-slate-500" />
+            <Plus className="w-3.5 h-3.5 text-blue-600" />
             <span>New Invoice</span>
           </button>
           <button
             type="button"
             onClick={() => navigate({ to: '/dyeing/new' })}
-            className="hidden sm:flex px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium items-center gap-1.5 shadow-sm transition-colors"
+            className="hidden sm:flex px-3 py-1.5 rounded-lg border border-violet-200 bg-violet-50/90 hover:bg-violet-100 text-violet-700 text-xs font-semibold items-center gap-1.5 shadow-sm transition-colors"
           >
-            <Plus className="w-3.5 h-3.5 text-slate-500" />
+            <Plus className="w-3.5 h-3.5 text-violet-600" />
             <span>Dyeing Order</span>
           </button>
           <button
@@ -488,7 +510,7 @@ export function Shell() {
               <span>PUBLIC</span>
             </div>
 
-            <nav className="mt-1 space-y-0.5 flex-1 overflow-y-auto">
+            <nav className="mt-1 space-y-1 flex-1 overflow-y-auto">
               {SIDEBAR_MODULES.map(mod => {
                 const Icon = mod.icon;
                 const active = isModuleActive(mod);
@@ -504,18 +526,18 @@ export function Shell() {
                         }
                         navigate({ to: mod.defaultPath as string });
                       }}
-                      className={`w-full px-3 py-2 rounded-lg text-left text-[13.5px] flex items-center justify-between gap-2.5 transition-colors ${
+                      className={`w-full px-2.5 py-2 rounded-lg text-left text-[13.5px] flex items-center justify-between gap-2 transition-all ${
                         active
-                          ? 'bg-slate-200/75 text-slate-900 font-semibold'
-                          : 'text-slate-700 font-medium hover:bg-slate-200/40 hover:text-slate-900'
+                          ? 'bg-blue-50/90 text-blue-950 font-semibold border border-blue-200/80 shadow-sm'
+                          : 'text-slate-700 font-medium hover:bg-white hover:shadow-sm'
                       }`}
                     >
                       <span className="flex items-center gap-2.5 truncate">
-                        <Icon
-                          className={`w-4 h-4 shrink-0 ${
-                            active ? 'text-slate-900' : 'text-slate-500'
-                          }`}
-                        />
+                        <span
+                          className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${mod.bgColor}`}
+                        >
+                          <Icon className={`w-3.5 h-3.5 shrink-0 ${mod.color}`} />
+                        </span>
                         <span className="truncate">{mod.label}</span>
                       </span>
                       {mod.children && (
@@ -529,7 +551,7 @@ export function Shell() {
 
                     {/* Expandable Sub-routes */}
                     {mod.children && isExpanded && (
-                      <div className="mt-0.5 ml-6 pl-2.5 border-l border-slate-200 space-y-0.5 py-0.5">
+                      <div className="mt-0.5 ml-6 pl-2.5 border-l-2 border-slate-200 space-y-0.5 py-0.5">
                         {mod.children.map(child => {
                           const childActive = pathname === child.path;
                           return (
@@ -628,10 +650,12 @@ export function Shell() {
                       type="button"
                       onClick={() => selectRoute(mod.defaultPath)}
                       className={`w-full px-3 py-2 rounded-lg text-left text-sm flex items-center gap-2.5 ${
-                        active ? 'bg-slate-100 font-semibold text-slate-900' : 'text-slate-700 hover:bg-slate-50'
+                        active ? 'bg-blue-50 font-semibold text-blue-950' : 'text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      <Icon className="w-4 h-4 text-slate-500" />
+                      <span className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${mod.bgColor}`}>
+                        <Icon className={`w-3.5 h-3.5 ${mod.color}`} />
+                      </span>
                       <span>{mod.label}</span>
                     </button>
                     {mod.children && (

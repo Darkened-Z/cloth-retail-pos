@@ -138,28 +138,28 @@
     color: #0f172a !important;
   }
 
-  /* Primary Action Buttons (Frappe dark slate / royal blue style) */
+  /* Primary Action Buttons (Frappe royal blue style) */
   button.bg-accent {
-    background-color: #111827 !important;
+    background-color: #2563eb !important;
     color: #ffffff !important;
-    border-color: #111827 !important;
+    border-color: #1d4ed8 !important;
   }
   button.bg-accent:hover {
-    background-color: #1f2937 !important;
+    background-color: #1d4ed8 !important;
     color: #ffffff !important;
   }
 
   /* Clean ERPNext Tables */
   table thead.bg-black,
   table tr.bg-black {
-    background-color: #f8fafc !important;
-    color: #475569 !important;
-    border-bottom: 1px solid #e2e8f0 !important;
+    background-color: #f1f5f9 !important;
+    color: #334155 !important;
+    border-bottom: 1px solid #cbd5e1 !important;
   }
 
   table thead.bg-black th,
   table tr.bg-black th {
-    color: #475569 !important;
+    color: #334155 !important;
     font-weight: 600 !important;
     font-family: 'Inter', system-ui, sans-serif !important;
     padding-top: 0.65rem !important;
@@ -173,15 +173,15 @@
     padding-bottom: 0.65rem !important;
     font-size: 0.875rem !important;
     line-height: 1.45 !important;
-    border-color: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
   }
 
   tbody tr {
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
   }
 
   tbody tr:hover {
-    background-color: #f8fafc !important;
+    background-color: #eff6ff !important;
   }
 
   /* Form Inputs & Selects */
