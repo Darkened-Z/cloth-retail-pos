@@ -15,13 +15,16 @@ import {
 } from '@/lib/supabase';
 import { Cloud, Upload, Download, CheckCircle2, AlertCircle, Copy, Database } from 'lucide-react';
 
-const SUPABASE_SQL_SCHEMA = `CREATE TABLE IF NOT EXISTS app_data (
+const SUPABASE_SQL_SCHEMA = `CREATE TABLE IF NOT EXISTS public.app_data (
   key         TEXT PRIMARY KEY,
   value       JSONB NOT NULL,
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-ALTER TABLE app_data DISABLE ROW LEVEL SECURITY;
-CREATE INDEX IF NOT EXISTS idx_app_data_updated ON app_data (updated_at DESC);`;
+GRANT ALL ON TABLE public.app_data TO anon, authenticated, service_role;
+DROP POLICY IF EXISTS "Allow all access to app_data" ON public.app_data;
+CREATE POLICY "Allow all access to app_data" ON public.app_data FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+ALTER TABLE public.app_data DISABLE ROW LEVEL SECURITY;
+CREATE INDEX IF NOT EXISTS idx_app_data_updated ON public.app_data (updated_at DESC);`;
 
 export function SettingsPage() {
   const { shop, update } = useShop();

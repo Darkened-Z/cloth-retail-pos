@@ -1,17 +1,27 @@
 -- ============================================================
--- Hafiz Fabrics POS — Supabase Schema
--- Run this ONCE in: Supabase Dashboard → SQL Editor → New query
+-- Hafiz Fabrics POS — Supabase Schema & Permissions
+-- Run this in: Supabase Dashboard → SQL Editor → New query
 -- ============================================================
 
--- Single key-value table that mirrors localStorage
-CREATE TABLE IF NOT EXISTS app_data (
+CREATE TABLE IF NOT EXISTS public.app_data (
   key         TEXT PRIMARY KEY,
   value       JSONB NOT NULL,
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Disable Row Level Security for now (enable + add policies before going public)
-ALTER TABLE app_data DISABLE ROW LEVEL SECURITY;
+-- Grant full table permissions to API roles
+GRANT ALL ON TABLE public.app_data TO anon, authenticated, service_role;
 
--- Optional: index for fast lookups (already fast via PK, but useful for future queries)
-CREATE INDEX IF NOT EXISTS idx_app_data_updated ON app_data (updated_at DESC);
+-- Allow public read/write policy (works even if RLS is enabled)
+DROP POLICY IF EXISTS "Allow all access to app_data" ON public.app_data;
+CREATE POLICY "Allow all access to app_data"
+  ON public.app_data
+  FOR ALL
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);
+
+-- Disable Row Level Security for frictionless sync
+ALTER TABLE public.app_data DISABLE ROW LEVEL SECURITY;
+
+CREATE INDEX IF NOT EXISTS idx_app_data_updated ON public.app_data (updated_at DESC);
