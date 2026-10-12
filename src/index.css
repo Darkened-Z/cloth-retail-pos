@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    --border: 0 0% 0%;
-    --ring: 45 100% 50%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --border: 214 32% 91%;
+    --ring: 221 83% 53%;
   }
 
   * {
-    border-color: #000;
+    border-color: #e2e8f0;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -23,17 +23,17 @@
   }
 
   body {
-    background: #f5f5f4;
-    color: #000;
-    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-    font-size: 15px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14.5px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
-    background: #ffb800;
-    color: #000;
+    background: #dbeafe;
+    color: #1e3a8a;
   }
 
   /* Tabular numerals across all monospace contexts */
@@ -42,82 +42,190 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* High-readability typography scale for shopkeepers (50+ friendly) */
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  /* High-readability typography scale */
   .text-xs {
-    font-size: 0.84375rem !important; /* 13.5px instead of 12px */
+    font-size: 0.8125rem !important; /* 13px */
     line-height: 1.45 !important;
   }
 
   .text-\[10px\],
   .text-\[11px\] {
-    font-size: 0.78125rem !important; /* 12.5px instead of 10-11px */
+    font-size: 0.75rem !important; /* 12px */
     line-height: 1.4 !important;
-    font-weight: 600;
+    font-weight: 500;
   }
 
-  /* Stronger contrast for secondary text in bright shop lighting */
-  .text-gray-400,
+  /* Balanced slate contrast for secondary labels */
+  .text-gray-400 {
+    color: #64748b !important;
+  }
   .text-gray-500 {
-    color: #374151 !important; /* gray-700 */
+    color: #475569 !important;
   }
   .text-gray-600 {
-    color: #1f2937 !important; /* gray-800 */
+    color: #334155 !important;
   }
 
-  /* Comfortable, readable tables across all modules */
-  table th {
+  /* ERPNext / Frappe Soft Borders & Rounded Surfaces */
+  .border-black,
+  .border-black\/10,
+  .border-black\/15,
+  .border-black\/20,
+  .border-black\/30 {
+    border-color: #e2e8f0 !important;
+  }
+
+  .divide-black > :not([hidden]) ~ :not([hidden]),
+  .divide-black\/10 > :not([hidden]) ~ :not([hidden]),
+  .divide-black\/20 > :not([hidden]) ~ :not([hidden]) {
+    border-color: #f1f5f9 !important;
+  }
+
+  .border-2 {
+    border-width: 1px !important;
+  }
+  .border-b-2 {
+    border-bottom-width: 1px !important;
+  }
+  .border-t-2 {
+    border-top-width: 1px !important;
+  }
+  .border-r-2 {
+    border-right-width: 1px !important;
+  }
+  .border-l-2 {
+    border-left-width: 1px !important;
+  }
+
+  div.border-2,
+  div.border {
+    border-radius: 0.625rem;
+  }
+
+  button.border-2,
+  button.border,
+  a.border-2,
+  a.border,
+  span.border-2,
+  span.border {
+    border-radius: 0.45rem;
+  }
+
+  /* Card section headers across inner pages */
+  div.border-b-2.bg-black.text-white,
+  div.border-b-2.bg-accent {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    border-top-left-radius: 0.625rem;
+    border-top-right-radius: 0.625rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  div.border-b-2.bg-black.text-white span,
+  div.border-b-2.bg-black.text-white div {
+    color: #0f172a !important;
+  }
+
+  /* Primary Action Buttons (Frappe dark slate / royal blue style) */
+  button.bg-accent {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+    border-color: #111827 !important;
+  }
+  button.bg-accent:hover {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+  }
+
+  /* Clean ERPNext Tables */
+  table thead.bg-black,
+  table tr.bg-black {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  table thead.bg-black th,
+  table tr.bg-black th {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
     padding-top: 0.65rem !important;
     padding-bottom: 0.65rem !important;
-    font-size: 0.84375rem !important;
-    letter-spacing: 0.03em;
+    font-size: 0.78125rem !important;
+    letter-spacing: 0.02em;
   }
 
   table td {
-    padding-top: 0.6rem !important;
-    padding-bottom: 0.6rem !important;
-    font-size: 0.875rem !important; /* 14px */
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+    font-size: 0.875rem !important;
     line-height: 1.45 !important;
+    border-color: #f1f5f9 !important;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #f1f5f9;
   }
 
   tbody tr:hover {
-    background-color: rgba(255, 184, 0, 0.14) !important;
+    background-color: #f8fafc !important;
   }
 
-  /* Comfortable form controls */
+  /* Form Inputs & Selects */
   input:not([type='checkbox']):not([type='radio']),
   select,
   textarea {
-    font-size: 0.9375rem !important; /* 15px */
+    border-radius: 0.45rem !important;
+    border: 1px solid #cbd5e1 !important;
+    background-color: #ffffff;
+    font-family: 'Inter', system-ui, sans-serif !important;
+    font-size: 0.875rem !important;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
   }
 
-  /* Crisp neo-brutalist scrollbars */
+  input:not([type='checkbox']):not([type='radio']):focus,
+  select:focus,
+  textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+    outline: none !important;
+  }
+
+  /* Subtle modern scrollbars */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #f4f4f4;
-    border-left: 1px solid #000;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #000;
+    background: #cbd5e1;
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #ffb800;
+    background: #94a3b8;
   }
 }
 
 @layer utilities {
   .sharp {
-    border-radius: 0 !important;
+    border-radius: 0.45rem !important;
   }
 
   .brutal-press {
-    transition: transform 80ms ease, box-shadow 80ms ease, background-color 120ms ease, color 120ms ease;
+    transition: all 140ms ease;
   }
   .brutal-press:active {
-    transform: translate(2px, 2px);
-    box-shadow: none !important;
+    transform: scale(0.99);
   }
 
   .table-scroll {

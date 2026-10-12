@@ -4,9 +4,33 @@ import { useAuth } from '@/stores/useAuth';
 import { useShop } from '@/stores/useShop';
 import { setLang, t, type LangMode } from '@/lib/i18n';
 import { useKeyboardShortcuts } from '@/lib/shortcuts';
-import { TopNav, NAV_ITEMS, formatChildLabel } from './TopNav';
 import { ShortcutFooter } from './ShortcutFooter';
-import { Menu, X, Search, HelpCircle, LogOut, Home, Receipt, Users, BarChart3, PlusCircle, Globe } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Search,
+  HelpCircle,
+  LogOut,
+  Home,
+  Receipt,
+  Users,
+  BarChart3,
+  PlusCircle,
+  Globe,
+  Printer,
+  FileCheck2,
+  BookOpen,
+  Tag,
+  ShoppingBag,
+  Package,
+  MessageSquare,
+  UserCheck,
+  Settings,
+  ChevronDown,
+  ChevronRight,
+  Bell,
+  Plus,
+} from 'lucide-react';
 
 interface PaletteRoute {
   label: string;
@@ -16,35 +40,158 @@ interface PaletteRoute {
 }
 
 const APP_ROUTES: PaletteRoute[] = [
-  { label: 'Dashboard / Home', category: 'HOME', path: '/' },
-  { label: 'Chart of Accounts', category: 'BASIC DATA', path: '/coa' },
-  { label: 'Items', category: 'BASIC DATA', path: '/items' },
-  { label: 'Locations', category: 'BASIC DATA', path: '/locations' },
-  { label: 'Customers', category: 'BASIC DATA', path: '/customers', shortcut: 'C' },
-  { label: 'Suppliers & Dyers', category: 'BASIC DATA', path: '/suppliers' },
-  { label: 'Employees', category: 'BASIC DATA', path: '/employees' },
-  { label: 'Sales Invoice List', category: 'TRANSACTIONS', path: '/sales' },
-  { label: 'New Sales Invoice', category: 'TRANSACTIONS', path: '/sales/new', shortcut: 'N' },
-  { label: 'Purchase Voucher List', category: 'TRANSACTIONS', path: '/purchase' },
-  { label: 'New Purchase Voucher', category: 'TRANSACTIONS', path: '/purchase/new' },
-  { label: 'Dyeing Voucher List', category: 'TRANSACTIONS', path: '/dyeing' },
-  { label: 'New Dyeing Voucher', category: 'TRANSACTIONS', path: '/dyeing/new', shortcut: 'D' },
-  { label: 'Stock Transfer', category: 'TRANSACTIONS', path: '/stock-transfer' },
-  { label: 'Receipt / Payment Voucher', category: 'TRANSACTIONS', path: '/vouchers/receipt-payment' },
-  { label: 'Journal Voucher', category: 'TRANSACTIONS', path: '/vouchers/journal' },
-  { label: 'Expenses', category: 'TRANSACTIONS', path: '/expenses', shortcut: 'E' },
-  { label: 'Attendance', category: 'TRANSACTIONS', path: '/attendance' },
-  { label: 'Payroll', category: 'TRANSACTIONS', path: '/payroll' },
+  { label: 'Fabric Retail & Printing Workspace', category: 'WORKSPACE', path: '/' },
+  { label: 'Chart of Accounts', category: 'ACCOUNTING', path: '/coa' },
+  { label: 'Items & Fabric Stock', category: 'STOCK', path: '/items' },
+  { label: 'Locations / Godowns', category: 'STOCK', path: '/locations' },
+  { label: 'Customers', category: 'CRM & SELLING', path: '/customers', shortcut: 'C' },
+  { label: 'Suppliers & Dyers', category: 'BUYING & DYEING', path: '/suppliers' },
+  { label: 'Employees', category: 'HR', path: '/employees' },
+  { label: 'Sales Invoice List', category: 'SELLING', path: '/sales' },
+  { label: 'New Sales Invoice (POS)', category: 'SELLING', path: '/sales/new', shortcut: 'N' },
+  { label: 'Purchase Voucher List', category: 'BUYING', path: '/purchase' },
+  { label: 'New Purchase Voucher', category: 'BUYING', path: '/purchase/new' },
+  { label: 'Dyeing & Pretreatment List', category: 'DYEING', path: '/dyeing' },
+  { label: 'New Dyeing Voucher', category: 'DYEING', path: '/dyeing/new', shortcut: 'D' },
+  { label: 'Stock Transfer', category: 'STOCK', path: '/stock-transfer' },
+  { label: 'Receipt / Payment Voucher', category: 'ACCOUNTING', path: '/vouchers/receipt-payment' },
+  { label: 'Journal Voucher', category: 'ACCOUNTING', path: '/vouchers/journal' },
+  { label: 'Daily Expenses', category: 'ACCOUNTING', path: '/expenses', shortcut: 'E' },
+  { label: 'Attendance', category: 'HR', path: '/attendance' },
+  { label: 'Payroll & Salary Slips', category: 'HR', path: '/payroll' },
   { label: 'Day Book', category: 'REPORTS', path: '/reports/daybook' },
   { label: 'Cash Book', category: 'REPORTS', path: '/reports/cashbook' },
-  { label: 'Ledger Report', category: 'REPORTS', path: '/reports/ledger' },
+  { label: 'Party Ledger Report', category: 'REPORTS', path: '/reports/ledger' },
   { label: 'Trial Balance', category: 'REPORTS', path: '/reports/trial-balance' },
-  { label: 'Trial Balance 4-Col', category: 'REPORTS', path: '/reports/trial-balance-4col' },
-  { label: 'Profit & Loss', category: 'REPORTS', path: '/reports/profit-loss' },
-  { label: 'Stock / Item Ledger', category: 'REPORTS', path: '/reports/stock' },
-  { label: 'Debtors Report', category: 'REPORTS', path: '/reports/debtors' },
-  { label: 'Shop Settings', category: 'SETTINGS', path: '/settings' },
+  { label: 'Trial Balance 4-Column', category: 'REPORTS', path: '/reports/trial-balance-4col' },
+  { label: 'Profit & Loss Statement', category: 'REPORTS', path: '/reports/profit-loss' },
+  { label: 'Stock / Fabric Ledger', category: 'REPORTS', path: '/reports/stock' },
+  { label: 'Debtors Aging Report', category: 'REPORTS', path: '/reports/debtors' },
+  { label: 'Shop Settings & Backup', category: 'SETTINGS', path: '/settings' },
   { label: 'Manage Users', category: 'SETTINGS', path: '/settings/users' },
+];
+
+interface SidebarModule {
+  id: string;
+  label: string;
+  icon: any;
+  defaultPath: string;
+  children?: { label: string; path: string }[];
+}
+
+const SIDEBAR_MODULES: SidebarModule[] = [
+  {
+    id: 'workspace',
+    label: 'Fabric Printing & POS',
+    icon: Printer,
+    defaultPath: '/',
+  },
+  {
+    id: 'dyeing',
+    label: 'Fabric Pretreatment',
+    icon: FileCheck2,
+    defaultPath: '/dyeing',
+    children: [
+      { label: 'Dyeing Vouchers', path: '/dyeing' },
+      { label: '+ New Dyeing Order', path: '/dyeing/new' },
+      { label: 'Dyers & Suppliers', path: '/suppliers' },
+    ],
+  },
+  {
+    id: 'accounting',
+    label: 'Accounting',
+    icon: BookOpen,
+    defaultPath: '/coa',
+    children: [
+      { label: 'Chart of Accounts', path: '/coa' },
+      { label: 'Receipt / Payment', path: '/vouchers/receipt-payment' },
+      { label: 'Journal Voucher', path: '/vouchers/journal' },
+      { label: 'Daily Expenses', path: '/expenses' },
+    ],
+  },
+  {
+    id: 'selling',
+    label: 'Selling',
+    icon: Tag,
+    defaultPath: '/sales',
+    children: [
+      { label: 'Sales Invoices', path: '/sales' },
+      { label: '+ New Sales Invoice', path: '/sales/new' },
+      { label: 'Customers', path: '/customers' },
+      { label: 'Debtors Report', path: '/reports/debtors' },
+    ],
+  },
+  {
+    id: 'buying',
+    label: 'Buying',
+    icon: ShoppingBag,
+    defaultPath: '/purchase',
+    children: [
+      { label: 'Purchase Vouchers', path: '/purchase' },
+      { label: '+ New Purchase', path: '/purchase/new' },
+      { label: 'Suppliers & Dyers', path: '/suppliers' },
+    ],
+  },
+  {
+    id: 'stock',
+    label: 'Stock',
+    icon: Package,
+    defaultPath: '/items',
+    children: [
+      { label: 'Items & Fabrics', path: '/items' },
+      { label: 'Stock Transfer', path: '/stock-transfer' },
+      { label: 'Locations / Godowns', path: '/locations' },
+      { label: 'Fabric Stock Ledger', path: '/reports/stock' },
+    ],
+  },
+  {
+    id: 'crm',
+    label: 'CRM & Parties',
+    icon: MessageSquare,
+    defaultPath: '/customers',
+    children: [
+      { label: 'Customers Directory', path: '/customers' },
+      { label: 'Suppliers & Dyers', path: '/suppliers' },
+      { label: 'Party Ledger Report', path: '/reports/ledger' },
+    ],
+  },
+  {
+    id: 'hr',
+    label: 'HR & Payroll',
+    icon: UserCheck,
+    defaultPath: '/employees',
+    children: [
+      { label: 'Employees & Advances', path: '/employees' },
+      { label: 'Daily Attendance', path: '/attendance' },
+      { label: 'Monthly Payroll', path: '/payroll' },
+    ],
+  },
+  {
+    id: 'reports',
+    label: 'Reports',
+    icon: BarChart3,
+    defaultPath: '/reports/daybook',
+    children: [
+      { label: 'Day Book', path: '/reports/daybook' },
+      { label: 'Cash Book', path: '/reports/cashbook' },
+      { label: 'Party Ledger', path: '/reports/ledger' },
+      { label: 'Trial Balance', path: '/reports/trial-balance' },
+      { label: 'Trial Balance (4-Col)', path: '/reports/trial-balance-4col' },
+      { label: 'Profit & Loss', path: '/reports/profit-loss' },
+      { label: 'Stock Ledger', path: '/reports/stock' },
+      { label: 'Debtors Aging', path: '/reports/debtors' },
+    ],
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: Settings,
+    defaultPath: '/settings',
+    children: [
+      { label: 'Shop Settings & Backup', path: '/settings' },
+      { label: 'Manage Users', path: '/settings/users' },
+    ],
+  },
 ];
 
 const SHORTCUT_DOCS = [
@@ -59,7 +206,7 @@ const SHORTCUT_DOCS = [
   { key: 'Ctrl+S', desc: 'Save current form or download PDF' },
   { key: 'Ctrl+K', desc: 'Open Command Palette (Quick Route Navigation)' },
   { key: 'Ctrl+D', desc: 'Duplicate line item in sales invoice' },
-  { key: 'N / D / E / C', desc: 'Dashboard quick keys: New Invoice (N), Dyeing (D), Expenses (E), Customers (C)' },
+  { key: 'N / D / E / C', desc: 'Workspace quick keys: New Invoice (N), Dyeing (D), Expenses (E), Customers (C)' },
 ];
 
 export function Shell() {
@@ -71,7 +218,9 @@ export function Shell() {
 
   const [showHelp, setShowHelp] = useState(false);
   const [showCmd, setShowCmd] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedModule, setExpandedModule] = useState<string | null>(null);
   const [cmdQuery, setCmdQuery] = useState('');
   const [cmdIndex, setCmdIndex] = useState(0);
 
@@ -81,6 +230,16 @@ export function Shell() {
 
   useEffect(() => {
     setMobileMenuOpen(false);
+    // Auto-expand sidebar module matching current route
+    const matching = SIDEBAR_MODULES.find(
+      m =>
+        m.id !== 'workspace' &&
+        (m.defaultPath === pathname ||
+          m.children?.some(c => pathname === c.path || pathname.startsWith(c.path + '/')))
+    );
+    if (matching) {
+      setExpandedModule(matching.id);
+    }
   }, [pathname]);
 
   const filteredRoutes = useMemo(() => {
@@ -97,6 +256,11 @@ export function Shell() {
   useKeyboardShortcuts({
     f1: () => setShowHelp(prev => !prev),
     'ctrl+k': () => {
+      setShowCmd(prev => !prev);
+      setCmdQuery('');
+      setCmdIndex(0);
+    },
+    'ctrl+g': () => {
       setShowCmd(prev => !prev);
       setCmdQuery('');
       setCmdIndex(0);
@@ -131,7 +295,7 @@ export function Shell() {
         { key: 'Ctrl+N', label: 'New' },
         { key: 'F9', label: 'Save' },
         { key: 'Esc', label: 'Cancel' },
-        { key: 'Ctrl+K', label: 'Command Palette' },
+        { key: 'Ctrl+K', label: 'Search / Command' },
         { key: 'F1', label: 'Help' },
         { key: 'Ctrl+P', label: 'Print' },
       ];
@@ -140,63 +304,84 @@ export function Shell() {
       { key: 'Ctrl+N', label: 'New' },
       { key: 'F9', label: 'Save' },
       { key: 'Esc', label: 'Cancel' },
-      { key: 'Ctrl+K', label: 'Command Palette' },
+      { key: 'Ctrl+K', label: 'Search / Command' },
       { key: 'F1', label: 'Help' },
       { key: 'Ctrl+P', label: 'Print' },
     ];
   }, [pathname]);
 
   const currentRouteMeta = APP_ROUTES.find(r => r.path === pathname);
+  const pageTitle =
+    pathname === '/'
+      ? shop.name || 'Fabric Printing & POS'
+      : currentRouteMeta?.label || shop.name || 'Hafiz Fabrics';
+
+  const avatarInitial = (user?.displayName || 'Admin').trim().charAt(0).toUpperCase();
+
+  function isModuleActive(mod: SidebarModule): boolean {
+    if (mod.id === 'workspace') return pathname === '/';
+    if (pathname === mod.defaultPath) return true;
+    return Boolean(mod.children?.some(c => pathname === c.path || pathname.startsWith(c.path + '/')));
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] text-black">
-      {/* Header */}
-      <header className="border-b-2 border-black bg-white px-3 sm:px-4 py-2 flex items-center justify-between gap-2 print:hidden sticky top-0 md:static z-40">
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(prev => !prev)}
-            className="md:hidden border-2 border-black p-1.5 bg-accent hover:bg-black hover:text-white brutal-press shrink-0"
-            aria-label="Open menu"
-          >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900">
+      {/* Top Frappe / ERPNext Utility Navbar */}
+      <header className="h-12 border-b border-slate-200 bg-white px-3 sm:px-5 flex items-center justify-between gap-3 print:hidden sticky top-0 z-40">
+        <div className="flex items-center gap-2.5 min-w-0">
           <button
             type="button"
             onClick={() => navigate({ to: '/' })}
             className="flex items-center gap-2.5 text-left min-w-0 group"
           >
-            <span className="w-7 h-7 border-2 border-black bg-accent font-display text-xs flex items-center justify-center shrink-0 shadow-brutal-sm group-hover:bg-black group-hover:text-accent transition-colors">
+            <span className="w-7 h-7 rounded-md bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm group-hover:bg-blue-700 transition-colors">
               HF
             </span>
-            <div className="min-w-0">
-              <div className="font-display text-base sm:text-xl tracking-tight leading-none truncate">
-                {shop.name}
-              </div>
-              <div className="hidden lg:block text-[11px] text-gray-500 font-mono uppercase truncate mt-0.5">
-                {shop.address} {shop.phone ? `· ${shop.phone}` : ''}
-              </div>
-            </div>
-          </button>
-          {currentRouteMeta && (
-            <span className="hidden xl:inline-flex items-center text-[10px] font-mono uppercase bg-muted border border-black px-2 py-0.5 ml-2">
-              {currentRouteMeta.category} / <strong className="ml-1">{currentRouteMeta.label}</strong>
+            <span className="hidden sm:inline font-semibold text-sm text-slate-700 hover:text-slate-900 truncate">
+              {shop.name}
             </span>
+          </button>
+          {currentRouteMeta && pathname !== '/' && (
+            <>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400 hidden sm:inline shrink-0" />
+              <span className="hidden sm:inline text-sm font-medium text-slate-900 truncate">
+                {currentRouteMeta.label}
+              </span>
+            </>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Quick Language Switcher */}
-          <div className="hidden sm:flex border-2 border-black bg-white text-[10px] font-mono font-bold">
+        {/* Center / Right Search + Actions */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* ERPNext Command / Awesomebar Search Input */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowCmd(true);
+              setCmdQuery('');
+              setCmdIndex(0);
+            }}
+            className="w-40 sm:w-72 md:w-80 bg-slate-100/90 hover:bg-slate-200/70 border border-slate-200/90 rounded-lg px-3 py-1.5 text-xs text-slate-500 flex items-center justify-between transition-colors"
+            title="Search or type a command (Ctrl+K)"
+          >
+            <span className="flex items-center gap-2 truncate">
+              <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="truncate">Search or type a command (Ctrl + K)</span>
+            </span>
+          </button>
+
+          {/* Language Switcher */}
+          <div className="hidden lg:flex items-center bg-slate-100 border border-slate-200 rounded-md p-0.5 text-[11px] font-medium">
             {(['en', 'ur', 'dual'] as LangMode[]).map(l => (
               <button
                 key={l}
                 type="button"
                 onClick={() => changeLang(l)}
-                className={`px-2 py-1 uppercase border-r border-black last:border-0 transition-colors ${
-                  shop.language === l ? 'bg-black text-accent' : 'hover:bg-accent text-black'
+                className={`px-2 py-0.5 uppercase rounded transition-colors ${
+                  shop.language === l
+                    ? 'bg-white text-slate-900 shadow-sm font-semibold'
+                    : 'text-slate-500 hover:text-slate-800'
                 }`}
-                title={`Language: ${l.toUpperCase()}`}
               >
                 {l}
               </button>
@@ -205,88 +390,227 @@ export function Shell() {
 
           <button
             type="button"
-            onClick={() => {
-              setShowCmd(true);
-              setCmdQuery('');
-              setCmdIndex(0);
-            }}
-            className="text-xs font-mono border-2 border-black px-2 sm:px-2.5 py-1 bg-white hover:bg-accent transition-colors brutal-press flex items-center gap-1.5"
-            title="Open Command Palette (Ctrl+K)"
+            onClick={() => setShowHelp(true)}
+            className="text-slate-500 hover:text-slate-900 p-1.5 rounded-md hover:bg-slate-100 transition-colors"
+            title="Notifications & Keyboard Shortcuts"
           >
-            <Search className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline font-bold">Ctrl+K</span>
+            <Bell className="w-4 h-4" />
           </button>
+
+          <div className="hidden sm:block h-4 w-px bg-slate-200" />
 
           <button
             type="button"
             onClick={() => setShowHelp(true)}
-            className="hidden sm:flex text-xs font-mono border-2 border-black px-2.5 py-1 bg-white hover:bg-accent transition-colors brutal-press items-center gap-1"
+            className="hidden sm:flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-slate-900 px-2 py-1 rounded-md hover:bg-slate-100 transition-colors"
             title="Keyboard Shortcuts Help (F1)"
           >
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span className="hidden md:inline font-bold">F1</span>
+            <span>Help</span>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>
 
-          <span className="hidden md:inline-flex items-center text-xs font-mono border-2 border-black bg-muted px-2.5 py-1 font-bold">
-            {user?.displayName} <span className="text-gray-500 ml-1 uppercase text-[10px]">({user?.role})</span>
-          </span>
-
-          <button
-            type="button"
-            onClick={() => {
-              logout();
-              navigate({ to: '/login' });
-            }}
-            className="text-xs font-mono border-2 border-black px-2 sm:px-3 py-1 bg-white hover:bg-danger hover:text-white transition-colors brutal-press uppercase flex items-center gap-1 font-bold"
-            title="Log Out"
-          >
-            <LogOut className="w-3.5 h-3.5 sm:hidden" />
-            <span className="hidden sm:inline">{t('logout', shop.language)}</span>
-          </button>
+          {/* Avatar + Logout */}
+          <div className="flex items-center gap-1.5">
+            <div
+              className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 font-semibold text-xs flex items-center justify-center border border-emerald-200"
+              title={`${user?.displayName || 'Admin'} (${user?.role || 'admin'})`}
+            >
+              {avatarInitial}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate({ to: '/login' });
+              }}
+              className="text-xs font-medium text-slate-600 hover:text-red-600 px-2 py-1 rounded-md hover:bg-red-50 transition-colors flex items-center gap-1"
+              title="Log Out"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden xl:inline">{t('logout', shop.language)}</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      <TopNav currentPath={pathname} lang={shop.language} />
+      {/* Secondary ERPNext Workspace Header Bar */}
+      <div className="bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3 print:hidden">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <button
+            type="button"
+            onClick={() => {
+              if (window.innerWidth < 768) {
+                setMobileMenuOpen(prev => !prev);
+              } else {
+                setSidebarCollapsed(prev => !prev);
+              }
+            }}
+            className="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            title="Toggle Sidebar"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
+          <h1 className="text-base sm:text-lg font-semibold text-slate-900 truncate">{pageTitle}</h1>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/sales/new' })}
+            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 shadow-sm transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5 text-slate-500" />
+            <span>New Invoice</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/dyeing/new' })}
+            className="hidden sm:flex px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium items-center gap-1.5 shadow-sm transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5 text-slate-500" />
+            <span>Dyeing Order</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate({ to: '/settings' })}
+            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-sm transition-colors"
+          >
+            Settings
+          </button>
+        </div>
+      </div>
+
+      {/* Body Layout: Left Sidebar + Main Content */}
+      <div className="flex-1 flex min-h-0">
+        {/* Desktop Left Sidebar (ERPNext style) */}
+        {!sidebarCollapsed && (
+          <aside className="hidden md:flex flex-col w-60 shrink-0 border-r border-slate-200/80 bg-[#F8FAFC] px-3 py-3 select-none print:hidden pb-16">
+            <div className="px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <ChevronDown className="w-3 h-3" />
+              <span>PUBLIC</span>
+            </div>
+
+            <nav className="mt-1 space-y-0.5 flex-1 overflow-y-auto">
+              {SIDEBAR_MODULES.map(mod => {
+                const Icon = mod.icon;
+                const active = isModuleActive(mod);
+                const isExpanded = expandedModule === mod.id;
+
+                return (
+                  <div key={mod.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (mod.children) {
+                          setExpandedModule(prev => (prev === mod.id ? null : mod.id));
+                        }
+                        navigate({ to: mod.defaultPath as string });
+                      }}
+                      className={`w-full px-3 py-2 rounded-lg text-left text-[13.5px] flex items-center justify-between gap-2.5 transition-colors ${
+                        active
+                          ? 'bg-slate-200/75 text-slate-900 font-semibold'
+                          : 'text-slate-700 font-medium hover:bg-slate-200/40 hover:text-slate-900'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2.5 truncate">
+                        <Icon
+                          className={`w-4 h-4 shrink-0 ${
+                            active ? 'text-slate-900' : 'text-slate-500'
+                          }`}
+                        />
+                        <span className="truncate">{mod.label}</span>
+                      </span>
+                      {mod.children && (
+                        <ChevronRight
+                          className={`w-3.5 h-3.5 text-slate-400 transition-transform shrink-0 ${
+                            isExpanded ? 'rotate-90' : ''
+                          }`}
+                        />
+                      )}
+                    </button>
+
+                    {/* Expandable Sub-routes */}
+                    {mod.children && isExpanded && (
+                      <div className="mt-0.5 ml-6 pl-2.5 border-l border-slate-200 space-y-0.5 py-0.5">
+                        {mod.children.map(child => {
+                          const childActive = pathname === child.path;
+                          return (
+                            <button
+                              key={child.path}
+                              type="button"
+                              onClick={() => navigate({ to: child.path as string })}
+                              className={`w-full px-2.5 py-1.5 rounded-md text-left text-xs transition-colors flex items-center justify-between ${
+                                childActive
+                                  ? 'bg-blue-50 text-blue-700 font-semibold'
+                                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                              }`}
+                            >
+                              <span className="truncate">{child.label}</span>
+                              {childActive && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
+          </aside>
+        )}
+
+        {/* Main Content Canvas */}
+        <main className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto pb-20 md:pb-14">
+          <Outlet />
+        </main>
+      </div>
 
       {/* Mobile Slide-Out Navigation Drawer */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 md:hidden print:hidden flex"
+          className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-[1px] md:hidden print:hidden flex"
           onClick={() => setMobileMenuOpen(false)}
         >
           <div
-            className="w-4/5 max-w-xs bg-white border-r-2 border-black h-full flex flex-col overflow-hidden shadow-brutal-lg"
+            className="w-4/5 max-w-xs bg-white border-r border-slate-200 h-full flex flex-col overflow-hidden shadow-xl"
             onClick={e => e.stopPropagation()}
           >
-            <div className="border-b-2 border-black bg-accent px-4 py-3 flex items-center justify-between">
-              <div>
-                <div className="font-display text-base leading-none">{shop.name}</div>
-                <div className="font-mono text-[11px] mt-1">
-                  {user?.displayName} · <span className="uppercase">{user?.role}</span>
+            <div className="border-b border-slate-200 bg-slate-50 px-4 py-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="w-7 h-7 rounded-md bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+                  HF
+                </span>
+                <div>
+                  <div className="font-semibold text-sm text-slate-900 leading-none">{shop.name}</div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    {user?.displayName} · <span className="uppercase">{user?.role}</span>
+                  </div>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="border-2 border-black bg-white p-1 hover:bg-black hover:text-white"
+                className="rounded-md p-1 text-slate-500 hover:bg-slate-200"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Mobile Language Bar */}
-            <div className="px-4 py-2.5 border-b-2 border-black bg-muted flex items-center justify-between">
-              <span className="text-xs font-mono uppercase font-bold flex items-center gap-1.5">
+            <div className="px-4 py-2.5 border-b border-slate-200 bg-white flex items-center justify-between">
+              <span className="text-xs font-medium text-slate-600 flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5" /> Language
               </span>
-              <div className="flex border-2 border-black bg-white text-[11px] font-mono font-bold">
+              <div className="flex bg-slate-100 border border-slate-200 rounded-md p-0.5 text-[11px] font-medium">
                 {(['en', 'ur', 'dual'] as LangMode[]).map(l => (
                   <button
                     key={l}
                     type="button"
                     onClick={() => changeLang(l)}
-                    className={`px-2 py-0.5 uppercase border-r border-black last:border-0 ${
-                      shop.language === l ? 'bg-black text-accent' : 'text-black'
+                    className={`px-2 py-0.5 uppercase rounded ${
+                      shop.language === l ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-600'
                     }`}
                   >
                     {l}
@@ -295,93 +619,56 @@ export function Shell() {
               </div>
             </div>
 
-            {/* Drawer Links */}
-            <div className="flex-1 overflow-y-auto divide-y-2 divide-black">
-              {NAV_ITEMS.map(section => {
-                const Icon = section.icon;
-                if (!section.children) {
-                  const active = pathname === section.path;
-                  return (
+            {/* Mobile Drawer Links */}
+            <div className="flex-1 overflow-y-auto p-2 space-y-1">
+              {SIDEBAR_MODULES.map(mod => {
+                const Icon = mod.icon;
+                const active = isModuleActive(mod);
+                return (
+                  <div key={mod.id} className="space-y-0.5">
                     <button
-                      key={section.key}
                       type="button"
-                      onClick={() => selectRoute(section.path!)}
-                      className={`w-full px-4 py-3 text-left font-sans font-bold text-xs uppercase flex items-center gap-2.5 ${
-                        active ? 'bg-black text-accent' : 'bg-white hover:bg-accent'
+                      onClick={() => selectRoute(mod.defaultPath)}
+                      className={`w-full px-3 py-2 rounded-lg text-left text-sm flex items-center gap-2.5 ${
+                        active ? 'bg-slate-100 font-semibold text-slate-900' : 'text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      <Icon className="w-4 h-4" />
-                      <span>{t(section.key, shop.language)}</span>
+                      <Icon className="w-4 h-4 text-slate-500" />
+                      <span>{mod.label}</span>
                     </button>
-                  );
-                }
-                return (
-                  <div key={section.key} className="bg-white">
-                    <div className="px-4 py-2 bg-muted/70 text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 flex items-center gap-2 border-b border-black/20">
-                      <Icon className="w-3.5 h-3.5" />
-                      <span>{t(section.key, shop.language)}</span>
-                    </div>
-                    <div className="divide-y divide-black/10">
-                      {section.children.map(child => {
-                        const active = pathname === child.path || pathname.startsWith(child.path + '/');
-                        return (
+                    {mod.children && (
+                      <div className="ml-6 pl-2.5 border-l border-slate-200 space-y-0.5">
+                        {mod.children.map(child => (
                           <button
                             key={child.path}
                             type="button"
                             onClick={() => selectRoute(child.path)}
-                            className={`w-full px-5 py-2.5 text-left text-xs font-sans flex items-center justify-between ${
-                              active ? 'bg-accent font-bold text-black' : 'hover:bg-muted text-gray-900'
+                            className={`w-full px-2.5 py-1.5 rounded-md text-left text-xs block ${
+                              pathname === child.path
+                                ? 'text-blue-600 font-semibold bg-blue-50/60'
+                                : 'text-slate-600 hover:bg-slate-50'
                             }`}
                           >
-                            <span>{formatChildLabel(child, shop.language)}</span>
-                            {active && <span className="w-2 h-2 bg-black" />}
+                            {child.label}
                           </button>
-                        );
-                      })}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
-            </div>
-
-            <div className="border-t-2 border-black p-3 bg-white flex gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setShowHelp(true);
-                }}
-                className="flex-1 border-2 border-black py-2 text-xs font-mono font-bold hover:bg-accent"
-              >
-                SHORTCUTS
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  navigate({ to: '/login' });
-                }}
-                className="flex-1 border-2 border-black bg-danger text-white py-2 text-xs font-mono font-bold uppercase"
-              >
-                {t('logout', shop.language)}
-              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Main Content Area (padded on bottom for mobile bottom nav and desktop fixed shortcut footer) */}
-      <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 md:pb-14">
-        <Outlet />
-      </main>
-
       {/* Mobile Sticky Bottom Navigation Bar */}
-      <nav className="md:hidden print:hidden fixed bottom-0 left-0 right-0 z-30 border-t-2 border-black bg-white grid grid-cols-5 shadow-[0_-2px_0_#000]">
+      <nav className="md:hidden print:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white grid grid-cols-5 shadow-lg">
         <button
           type="button"
           onClick={() => navigate({ to: '/' })}
-          className={`flex flex-col items-center justify-center py-2 text-[10px] font-mono font-bold border-r border-black/20 ${
-            pathname === '/' ? 'bg-black text-accent' : 'text-black active:bg-accent'
+          className={`flex flex-col items-center justify-center py-2 text-[11px] font-medium ${
+            pathname === '/' ? 'text-blue-600 font-semibold' : 'text-slate-600'
           }`}
         >
           <Home className="w-4 h-4 mb-0.5" />
@@ -390,8 +677,8 @@ export function Shell() {
         <button
           type="button"
           onClick={() => navigate({ to: '/sales' })}
-          className={`flex flex-col items-center justify-center py-2 text-[10px] font-mono font-bold border-r border-black/20 ${
-            pathname === '/sales' ? 'bg-black text-accent' : 'text-black active:bg-accent'
+          className={`flex flex-col items-center justify-center py-2 text-[11px] font-medium ${
+            pathname === '/sales' ? 'text-blue-600 font-semibold' : 'text-slate-600'
           }`}
         >
           <Receipt className="w-4 h-4 mb-0.5" />
@@ -400,9 +687,7 @@ export function Shell() {
         <button
           type="button"
           onClick={() => navigate({ to: '/sales/new' })}
-          className={`flex flex-col items-center justify-center py-2 text-[10px] font-mono font-bold border-r border-black/20 ${
-            pathname === '/sales/new' ? 'bg-black text-accent' : 'bg-accent text-black'
-          }`}
+          className="flex flex-col items-center justify-center py-2 text-[11px] font-semibold text-blue-600 bg-blue-50/70"
         >
           <PlusCircle className="w-4 h-4 mb-0.5" />
           <span>+ Invoice</span>
@@ -410,10 +695,10 @@ export function Shell() {
         <button
           type="button"
           onClick={() => navigate({ to: '/customers' })}
-          className={`flex flex-col items-center justify-center py-2 text-[10px] font-mono font-bold border-r border-black/20 ${
+          className={`flex flex-col items-center justify-center py-2 text-[11px] font-medium ${
             pathname.startsWith('/customers') || pathname.startsWith('/suppliers')
-              ? 'bg-black text-accent'
-              : 'text-black active:bg-accent'
+              ? 'text-blue-600 font-semibold'
+              : 'text-slate-600'
           }`}
         >
           <Users className="w-4 h-4 mb-0.5" />
@@ -422,38 +707,41 @@ export function Shell() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(true)}
-          className={`flex flex-col items-center justify-center py-2 text-[10px] font-mono font-bold ${
-            mobileMenuOpen ? 'bg-black text-accent' : 'text-black active:bg-accent'
+          className={`flex flex-col items-center justify-center py-2 text-[11px] font-medium ${
+            mobileMenuOpen ? 'text-blue-600 font-semibold' : 'text-slate-600'
           }`}
         >
           <BarChart3 className="w-4 h-4 mb-0.5" />
-          <span>All Menu</span>
+          <span>Menu</span>
         </button>
       </nav>
 
+      {/* Locked Bottom Keyboard Shortcuts Footer */}
       <ShortcutFooter shortcuts={footerShortcuts} />
 
       {/* Command Palette Modal (Ctrl+K) */}
       {showCmd && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center pt-12 sm:pt-20 px-3 sm:px-4 print:hidden"
+          className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-[1px] flex items-start justify-center pt-14 sm:pt-20 px-3 sm:px-4 print:hidden"
           onClick={() => setShowCmd(false)}
         >
           <div
-            className="border-2 border-black bg-white shadow-brutal-lg w-full max-w-lg overflow-hidden"
+            className="border border-slate-200 bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
-            <div className="border-b-2 border-black bg-accent px-4 py-2.5 flex items-center justify-between">
-              <span className="font-display text-sm uppercase tracking-wider">COMMAND PALETTE (CTRL+K)</span>
+            <div className="border-b border-slate-200 bg-slate-50 px-4 py-2.5 flex items-center justify-between">
+              <span className="font-semibold text-xs text-slate-700 uppercase tracking-wider">
+                Search or Type a Command (Ctrl+K)
+              </span>
               <button
                 type="button"
                 onClick={() => setShowCmd(false)}
-                className="text-xs font-mono border border-black bg-white px-2 py-0.5 hover:bg-black hover:text-white"
+                className="text-xs font-medium border border-slate-200 rounded-md bg-white px-2 py-0.5 text-slate-600 hover:bg-slate-100"
               >
                 ESC ✕
               </button>
             </div>
-            <div className="p-3 border-b-2 border-black">
+            <div className="p-3 border-b border-slate-200">
               <input
                 autoFocus
                 value={cmdQuery}
@@ -478,13 +766,13 @@ export function Shell() {
                     setShowCmd(false);
                   }
                 }}
-                placeholder="Type a screen name or path (e.g. Sales, Ledger, Settings)..."
-                className="w-full border-2 border-black px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="Search workspaces, documents, reports (e.g. Sales, Dyeing, Ledger)..."
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none"
               />
             </div>
-            <div className="max-h-72 overflow-y-auto divide-y divide-black/20">
+            <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
               {filteredRoutes.length === 0 ? (
-                <div className="p-4 text-xs font-mono text-gray-500 text-center">No matching screens found</div>
+                <div className="p-4 text-xs text-slate-500 text-center">No matching screens found</div>
               ) : (
                 filteredRoutes.map((route, idx) => (
                   <button
@@ -492,21 +780,23 @@ export function Shell() {
                     type="button"
                     onClick={() => selectRoute(route.path)}
                     onMouseEnter={() => setCmdIndex(idx)}
-                    className={`w-full px-4 py-2.5 text-left font-mono text-xs flex items-center justify-between gap-2 transition-colors ${
-                      idx === cmdIndex ? 'bg-black text-white' : 'bg-white hover:bg-accent text-black'
+                    className={`w-full px-4 py-2.5 text-left text-sm flex items-center justify-between gap-2 transition-colors ${
+                      idx === cmdIndex ? 'bg-blue-50 text-blue-900' : 'bg-white hover:bg-slate-50 text-slate-800'
                     }`}
                   >
                     <div className="truncate">
-                      <span className="font-bold">{route.label}</span>
-                      <span className={`ml-2 text-[10px] uppercase ${idx === cmdIndex ? 'text-accent' : 'text-gray-500'}`}>
-                        [{route.category}]
+                      <span className="font-medium">{route.label}</span>
+                      <span className="ml-2 text-[11px] uppercase text-slate-400 font-medium">
+                        {route.category}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {route.shortcut && (
-                        <span className="border border-current px-1.5 py-0.5 text-[10px]">{route.shortcut}</span>
+                        <span className="border border-slate-200 bg-slate-100 rounded px-1.5 py-0.5 text-[11px] font-mono text-slate-600">
+                          {route.shortcut}
+                        </span>
                       )}
-                      <span className="opacity-70 hidden sm:inline">{route.path}</span>
+                      <span className="text-xs text-slate-400 hidden sm:inline font-mono">{route.path}</span>
                     </div>
                   </button>
                 ))
@@ -519,38 +809,40 @@ export function Shell() {
       {/* Keyboard Shortcuts Help Modal (F1) */}
       {showHelp && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 sm:p-4 print:hidden"
+          className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-[1px] flex items-center justify-center p-3 sm:p-4 print:hidden"
           onClick={() => setShowHelp(false)}
         >
           <div
-            className="border-2 border-black bg-white shadow-brutal-lg w-full max-w-xl overflow-hidden"
+            className="border border-slate-200 bg-white rounded-xl shadow-2xl w-full max-w-xl overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
-            <div className="border-b-2 border-black bg-accent px-4 py-3 flex items-center justify-between">
-              <span className="font-display text-sm sm:text-base uppercase tracking-wider">KEYBOARD SHORTCUTS HELP (F1)</span>
+            <div className="border-b border-slate-200 bg-slate-50 px-5 py-3.5 flex items-center justify-between">
+              <span className="font-semibold text-sm text-slate-900">Keyboard Shortcuts (F1)</span>
               <button
                 type="button"
                 onClick={() => setShowHelp(false)}
-                className="text-xs font-mono border-2 border-black bg-white px-2.5 py-0.5 font-bold hover:bg-black hover:text-white"
+                className="text-xs font-medium border border-slate-200 rounded-md bg-white px-2.5 py-1 text-slate-600 hover:bg-slate-100"
               >
                 ESC ✕
               </button>
             </div>
-            <div className="p-3 sm:p-4 max-h-[75vh] overflow-y-auto">
-              <table className="w-full text-xs font-mono border-2 border-black">
-                <thead className="bg-black text-white">
+            <div className="p-4 max-h-[75vh] overflow-y-auto">
+              <table className="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+                <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
                   <tr>
-                    <th className="text-left px-3 py-2 uppercase w-32 sm:w-40">Key</th>
-                    <th className="text-left px-3 py-2 uppercase">Action</th>
+                    <th className="text-left px-4 py-2.5 font-semibold w-36">Key</th>
+                    <th className="text-left px-4 py-2.5 font-semibold">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-black">
+                <tbody className="divide-y divide-slate-100">
                   {SHORTCUT_DOCS.map(s => (
-                    <tr key={s.key} className="odd:bg-white even:bg-gray-50">
-                      <td className="px-3 py-2 font-bold whitespace-nowrap">
-                        <span className="border border-black bg-accent px-1.5 py-0.5 text-black">{s.key}</span>
+                    <tr key={s.key}>
+                      <td className="px-4 py-2.5 whitespace-nowrap">
+                        <kbd className="border border-slate-300 bg-slate-100 rounded px-2 py-0.5 text-xs font-mono font-semibold text-slate-800">
+                          {s.key}
+                        </kbd>
                       </td>
-                      <td className="px-3 py-2">{s.desc}</td>
+                      <td className="px-4 py-2.5 text-slate-700">{s.desc}</td>
                     </tr>
                   ))}
                 </tbody>

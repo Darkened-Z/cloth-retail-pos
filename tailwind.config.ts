@@ -8,33 +8,32 @@ export default {
     extend: {
       colors: {
         accent: {
-          DEFAULT: '#FFB800',
-          foreground: '#000000',
+          DEFAULT: '#F1F5F9',
+          foreground: '#0F172A',
         },
         danger: {
-          DEFAULT: '#E63946',
+          DEFAULT: '#DC2626',
           foreground: '#FFFFFF',
         },
         success: {
-          DEFAULT: '#2D6A4F',
+          DEFAULT: '#059669',
           foreground: '#FFFFFF',
         },
         muted: {
-          DEFAULT: '#F4F4F4',
-          foreground: '#6B7280',
+          DEFAULT: '#F8FAFC',
+          foreground: '#475569',
         },
       },
       fontFamily: {
-        display: ['"Archivo Black"', 'system-ui', 'sans-serif'],
-        sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        display: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
-      borderRadius: { DEFAULT: '0' },
       boxShadow: {
-        brutal: '4px 4px 0 #000',
-        'brutal-sm': '2px 2px 0 #000',
-        'brutal-lg': '6px 6px 0 #000',
-        'brutal-inset': 'inset 2px 2px 0 #000',
+        brutal: '0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04)',
+        'brutal-sm': '0 1px 2px 0 rgba(15, 23, 42, 0.05)',
+        'brutal-lg': '0 12px 28px -6px rgba(15, 23, 42, 0.12), 0 4px 10px -3px rgba(15, 23, 42, 0.06)',
+        'brutal-inset': 'inset 0 1px 2px 0 rgba(15, 23, 42, 0.05)',
       },
       keyframes: {
         'accordion-down': {
