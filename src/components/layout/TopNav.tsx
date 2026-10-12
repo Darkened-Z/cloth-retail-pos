@@ -104,17 +104,17 @@ export function TopNav({ currentPath, lang }: { currentPath: string; lang?: Lang
               type="button"
               onClick={() => setOpenKey(prev => (prev === item.key ? null : item.key))}
               className={cn(
-                'px-4 py-2.5 text-xs font-sans font-bold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2',
+                'px-4 py-3 text-sm font-sans font-bold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2',
                 isActiveGroup && 'bg-black text-white'
               )}
             >
-              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <Icon className="w-4 h-4 shrink-0" />
               <span>{topLabel}</span>
-              <ChevronDown className={cn('w-3.5 h-3.5 transition-transform', isOpen && 'rotate-180')} />
+              <ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />
             </button>
             <div
               className={cn(
-                'absolute top-full left-0 flex-col z-50 border-2 border-black bg-white shadow-brutal min-w-[220px]',
+                'absolute top-full left-0 flex-col z-50 border-2 border-black bg-white shadow-brutal min-w-[240px]',
                 isOpen ? 'flex' : 'hidden group-hover:flex'
               )}
             >
@@ -129,12 +129,12 @@ export function TopNav({ currentPath, lang }: { currentPath: string; lang?: Lang
                       navigate({ to: child.path as string });
                     }}
                     className={cn(
-                      'px-4 py-2.5 text-xs font-sans font-medium text-left border-b border-black/20 last:border-0 hover:bg-accent hover:text-black transition-colors whitespace-nowrap flex items-center justify-between gap-3',
+                      'px-4 py-3 text-sm font-sans font-medium text-left border-b border-black/20 last:border-0 hover:bg-accent hover:text-black transition-colors whitespace-nowrap flex items-center justify-between gap-3',
                       childActive && 'bg-accent font-bold'
                     )}
                   >
                     <span>{formatChildLabel(child, activeLang)}</span>
-                    {childActive && <span className="w-1.5 h-1.5 bg-black shrink-0" />}
+                    {childActive && <span className="w-2 h-2 bg-black shrink-0" />}
                   </button>
                 );
               })}
@@ -146,11 +146,11 @@ export function TopNav({ currentPath, lang }: { currentPath: string; lang?: Lang
             type="button"
             onClick={() => navigate({ to: item.path as string })}
             className={cn(
-              'px-4 py-2.5 text-xs font-sans font-bold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2',
+              'px-4 py-3 text-sm font-sans font-bold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2',
               isActiveGroup && 'bg-black text-white'
             )}
           >
-            <Icon className="w-3.5 h-3.5 shrink-0" />
+            <Icon className="w-4 h-4 shrink-0" />
             <span>{topLabel}</span>
           </button>
         );

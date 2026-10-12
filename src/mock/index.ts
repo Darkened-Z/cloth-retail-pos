@@ -34,30 +34,38 @@ export {
 };
 
 export function seedAll() {
-  if (storage.get('seeded_v5')) return;
-  storage.set('shop', mockShop);
-  storage.set('users', mockUsers);
-  storage.set('accountMasters', mockAccountMasters);
-  storage.set('accountSubs', mockAccountSubs);
-  storage.set('accounts', mockAccounts);
-  storage.set('itemMasters', mockItemMasters);
-  storage.set('itemSubs', mockItemSubs);
-  storage.set('items', mockItems);
-  storage.set('parties', mockParties);
-  storage.set('invoices', mockInvoices);
-  storage.set('purchaseVouchers', mockPurchaseVouchers);
-  storage.set('dyeingVouchers', mockDyeingVouchers);
-  storage.set('expenses', mockExpenses);
-  storage.set('employees', mockEmployees);
-  storage.set('attendance', mockAttendance);
-  storage.set('advances', []);
-  storage.set('payrollRuns', []);
-  storage.set('locations', mockLocations);
-  storage.set('stockTransfers', mockStockTransfers);
-  storage.set('receiptVouchers', mockReceiptVouchers);
-  storage.set('paymentVouchers', mockPaymentVouchers);
-  storage.set('journalVouchers', mockJournalVouchers);
-  storage.set('seeded_v5', true);
+  if (!storage.get('seeded_v5')) {
+    storage.set('shop', mockShop);
+    storage.set('users', mockUsers);
+    storage.set('accountMasters', mockAccountMasters);
+    storage.set('accountSubs', mockAccountSubs);
+    storage.set('accounts', mockAccounts);
+    storage.set('itemMasters', mockItemMasters);
+    storage.set('itemSubs', mockItemSubs);
+    storage.set('items', mockItems);
+    storage.set('parties', mockParties);
+    storage.set('invoices', mockInvoices);
+    storage.set('purchaseVouchers', mockPurchaseVouchers);
+    storage.set('dyeingVouchers', mockDyeingVouchers);
+    storage.set('expenses', mockExpenses);
+    storage.set('employees', mockEmployees);
+    storage.set('attendance', mockAttendance);
+    storage.set('advances', []);
+    storage.set('payrollRuns', []);
+    storage.set('locations', mockLocations);
+    storage.set('stockTransfers', mockStockTransfers);
+    storage.set('receiptVouchers', mockReceiptVouchers);
+    storage.set('paymentVouchers', mockPaymentVouchers);
+    storage.set('journalVouchers', mockJournalVouchers);
+    storage.set('seeded_v5', true);
+  }
+  if (!storage.get('lang_clean_v1')) {
+    const existingShop = storage.get<typeof mockShop>('shop');
+    if (existingShop && existingShop.language === 'dual') {
+      storage.set('shop', { ...existingShop, language: 'en' });
+    }
+    storage.set('lang_clean_v1', true);
+  }
 }
 
 export function resetAll() {

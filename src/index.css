@@ -23,9 +23,11 @@
   }
 
   body {
-    background: #fafafa;
+    background: #f5f5f4;
     color: #000;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -38,6 +40,54 @@
   .font-mono,
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* High-readability typography scale for shopkeepers (50+ friendly) */
+  .text-xs {
+    font-size: 0.84375rem !important; /* 13.5px instead of 12px */
+    line-height: 1.45 !important;
+  }
+
+  .text-\[10px\],
+  .text-\[11px\] {
+    font-size: 0.78125rem !important; /* 12.5px instead of 10-11px */
+    line-height: 1.4 !important;
+    font-weight: 600;
+  }
+
+  /* Stronger contrast for secondary text in bright shop lighting */
+  .text-gray-400,
+  .text-gray-500 {
+    color: #374151 !important; /* gray-700 */
+  }
+  .text-gray-600 {
+    color: #1f2937 !important; /* gray-800 */
+  }
+
+  /* Comfortable, readable tables across all modules */
+  table th {
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+    font-size: 0.84375rem !important;
+    letter-spacing: 0.03em;
+  }
+
+  table td {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    font-size: 0.875rem !important; /* 14px */
+    line-height: 1.45 !important;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(255, 184, 0, 0.14) !important;
+  }
+
+  /* Comfortable form controls */
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    font-size: 0.9375rem !important; /* 15px */
   }
 
   /* Crisp neo-brutalist scrollbars */

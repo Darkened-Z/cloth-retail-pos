@@ -8,5 +8,5 @@ export const mockShop: Shop = {
   ntn: '1234567-8',
   terms: 'Goods once sold will not be returned. Exchange possible within 7 days.',
   invoicePrefix: '120',
-  language: 'dual',
+  language: 'en',
 };
