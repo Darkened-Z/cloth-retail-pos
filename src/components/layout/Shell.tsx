@@ -9,7 +9,6 @@ import {
   Menu,
   X,
   Search,
-  HelpCircle,
   LogOut,
   Home,
   Receipt,
@@ -17,7 +16,6 @@ import {
   BarChart3,
   PlusCircle,
   Globe,
-  Printer,
   FileCheck2,
   BookOpen,
   Tag,
@@ -40,7 +38,7 @@ interface PaletteRoute {
 }
 
 const APP_ROUTES: PaletteRoute[] = [
-  { label: 'Fabric Retail & Printing Workspace', category: 'WORKSPACE', path: '/' },
+  { label: 'Dashboard', category: 'HOME', path: '/' },
   { label: 'Chart of Accounts', category: 'ACCOUNTING', path: '/coa' },
   { label: 'Items & Fabric Stock', category: 'STOCK', path: '/items' },
   { label: 'Locations / Godowns', category: 'STOCK', path: '/locations' },
@@ -82,8 +80,8 @@ interface SidebarModule {
 const SIDEBAR_MODULES: SidebarModule[] = [
   {
     id: 'workspace',
-    label: 'Fabric Printing & POS',
-    icon: Printer,
+    label: 'Dashboard',
+    icon: Home,
     defaultPath: '/',
   },
   {
@@ -313,7 +311,7 @@ export function Shell() {
   const currentRouteMeta = APP_ROUTES.find(r => r.path === pathname);
   const pageTitle =
     pathname === '/'
-      ? shop.name || 'Fabric Printing & POS'
+      ? 'Dashboard'
       : currentRouteMeta?.label || shop.name || 'Hafiz Fabrics';
 
   const avatarInitial = (user?.displayName || 'Admin').trim().charAt(0).toUpperCase();
