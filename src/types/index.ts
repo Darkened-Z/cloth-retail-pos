@@ -18,6 +18,7 @@ export interface User {
   passwordHash: string;
   role: 'admin' | 'cashier' | 'accountant';
   displayName: string;
+  active?: boolean;
 }
 
 export interface AccountMaster { id: string; nature: AccountNature; name: string; }
@@ -99,6 +100,9 @@ export interface DyeingVoucher {
   qtyOut: number;
   ratePerMeter: number;
   totalValue: number;
+  paid?: number;
+  balance?: number;
+  paymentMode?: 'cash' | 'credit' | 'partial';
   remarks?: string;
 }
 

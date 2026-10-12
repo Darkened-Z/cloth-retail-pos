@@ -1,9 +1,12 @@
 import { useCoa } from '@/stores/useCoa';
 import { useInvoices } from '@/stores/useInvoices';
 import { usePurchase } from '@/stores/usePurchase';
+import { useDyeing } from '@/stores/useDyeing';
 import { useExpenses } from '@/stores/useExpenses';
 import { useVouchers } from '@/stores/useVouchers';
+import { useJournals } from '@/stores/useJournals';
 import { formatNumber } from '@/lib/formatNumber';
+import { useKeyboardShortcuts } from '@/lib/shortcuts';
 
 interface Row {
   accountId: string;
@@ -23,8 +26,14 @@ export function TrialBalance4ColPage() {
   const { accounts, subs: accountSubs, masters: accountMasters } = useCoa();
   const { invoices } = useInvoices();
   const { vouchers: purchases } = usePurchase();
+  const { vouchers: dyeings } = useDyeing();
   const { expenses } = useExpenses();
   const { receipts, payments } = useVouchers();
+  const { journals } = useJournals();
+
+  useKeyboardShortcuts({
+    'ctrl+p': () => window.print(),
+  });
 
   // Build period movements per account
   const movements: Record<string, { dr: number; cr: number }> = {};
@@ -43,6 +52,13 @@ export function TrialBalance4ColPage() {
     addDr('A700', p.grandTotal);
     if (p.paymentMode === 'cash') addCr('A410', p.grandTotal);
     else addCr('A200', p.grandTotal);
+  });
+
+  // Dyeing → Debit A710 (Dyeing Charges), Credit A410 or A200
+  dyeings.forEach(d => {
+    addDr('A710', d.totalValue);
+    if (d.paymentMode === 'cash') addCr('A410', d.totalValue);
+    else addCr('A200', d.totalValue);
   });
 
   // Expenses → Debit expense account, Credit A410 or A411
@@ -64,6 +80,14 @@ export function TrialBalance4ColPage() {
     const cashAcc = p.bankAccountId ?? 'A410';
     addCr(cashAcc, p.amount);
     addDr('A200', p.amount);
+  });
+
+  // Journals → Debit / Credit per line
+  journals.forEach(j => {
+    j.lines.forEach(l => {
+      if (l.debit > 0) addDr(l.accountId, l.debit);
+      if (l.credit > 0) addCr(l.accountId, l.credit);
+    });
   });
 
   const rows: Row[] = accounts.map(acc => {
@@ -104,52 +128,58 @@ export function TrialBalance4ColPage() {
   }), { openingDr: 0, openingCr: 0, periodDr: 0, periodCr: 0, closingDr: 0, closingCr: 0 });
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-4">
-      <h1 className="text-2xl font-black uppercase tracking-tight">Trial Balance — 4 Column</h1>
+    <div className="p-3 sm:p-6 max-w-6xl mx-auto space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="font-display text-2xl uppercase tracking-tight">Trial Balance — 4 Column</h1>
+        <button onClick={() => window.print()}
+          className="w-full sm:w-auto border-2 border-black bg-white hover:bg-accent px-4 py-2 font-mono text-xs font-bold uppercase shadow-brutal-sm brutal-press">
+          PRINT (Ctrl+P)
+        </button>
+      </div>
 
-      <div className="border-2 border-black overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="border-2 border-black shadow-brutal overflow-x-auto bg-white">
+        <table className="w-full min-w-[720px] text-sm">
           <thead>
             <tr className="bg-black text-white">
-              <th className="text-left px-4 py-2 font-bold uppercase" rowSpan={2}>Account</th>
-              <th className="text-center px-4 py-2 font-bold uppercase border-l-2 border-white" colSpan={2}>Opening Balance</th>
-              <th className="text-center px-4 py-2 font-bold uppercase border-l-2 border-white" colSpan={2}>Period Movement</th>
-              <th className="text-center px-4 py-2 font-bold uppercase border-l-2 border-white" colSpan={2}>Closing Balance</th>
+              <th className="text-left px-4 py-2 font-bold uppercase whitespace-nowrap" rowSpan={2}>Account</th>
+              <th className="text-center px-4 py-2 font-bold uppercase border-l-2 border-white whitespace-nowrap" colSpan={2}>Opening Balance</th>
+              <th className="text-center px-4 py-2 font-bold uppercase border-l-2 border-white whitespace-nowrap" colSpan={2}>Period Movement</th>
+              <th className="text-center px-4 py-2 font-bold uppercase border-l-2 border-white whitespace-nowrap" colSpan={2}>Closing Balance</th>
             </tr>
             <tr className="bg-gray-800 text-white text-xs">
-              <th className="text-right px-4 py-1 font-bold border-l-2 border-white">Debit</th>
-              <th className="text-right px-4 py-1 font-bold">Credit</th>
-              <th className="text-right px-4 py-1 font-bold border-l-2 border-white">Debit</th>
-              <th className="text-right px-4 py-1 font-bold">Credit</th>
-              <th className="text-right px-4 py-1 font-bold border-l-2 border-white">Debit</th>
-              <th className="text-right px-4 py-1 font-bold">Credit</th>
+              <th className="text-right px-4 py-1.5 font-bold border-l-2 border-white whitespace-nowrap">Debit</th>
+              <th className="text-right px-4 py-1.5 font-bold whitespace-nowrap">Credit</th>
+              <th className="text-right px-4 py-1.5 font-bold border-l-2 border-white whitespace-nowrap">Debit</th>
+              <th className="text-right px-4 py-1.5 font-bold whitespace-nowrap">Credit</th>
+              <th className="text-right px-4 py-1.5 font-bold border-l-2 border-white whitespace-nowrap">Debit</th>
+              <th className="text-right px-4 py-1.5 font-bold whitespace-nowrap">Credit</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r, i) => (
-              <tr key={r.accountId} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+              <tr key={r.accountId} className={`border-b border-black/20 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                 <td className="px-4 py-2">
                   <div className="font-bold text-sm">{r.accountName}</div>
-                  <div className="text-xs text-gray-500">{r.masterName} › {r.subName}</div>
+                  <div className="text-xs text-gray-500 whitespace-nowrap">{r.masterName} › {r.subName}</div>
                 </td>
-                <td className="px-4 py-2 text-right font-mono text-xs border-l border-gray-200">{r.openingDr ? formatNumber(r.openingDr) : '-'}</td>
-                <td className="px-4 py-2 text-right font-mono text-xs">{r.openingCr ? formatNumber(r.openingCr) : '-'}</td>
-                <td className="px-4 py-2 text-right font-mono text-xs border-l border-gray-200">{r.periodDr ? formatNumber(r.periodDr) : '-'}</td>
-                <td className="px-4 py-2 text-right font-mono text-xs">{r.periodCr ? formatNumber(r.periodCr) : '-'}</td>
-                <td className="px-4 py-2 text-right font-mono font-bold text-xs border-l border-gray-200">{r.closingDr ? formatNumber(r.closingDr) : '-'}</td>
-                <td className="px-4 py-2 text-right font-mono font-bold text-xs">{r.closingCr ? formatNumber(r.closingCr) : '-'}</td>
+                <td className="px-4 py-2 text-right font-mono text-xs border-l border-gray-200 whitespace-nowrap">{r.openingDr ? formatNumber(r.openingDr) : '—'}</td>
+                <td className="px-4 py-2 text-right font-mono text-xs whitespace-nowrap">{r.openingCr ? formatNumber(r.openingCr) : '—'}</td>
+                <td className="px-4 py-2 text-right font-mono text-xs border-l border-gray-200 whitespace-nowrap">{r.periodDr ? formatNumber(r.periodDr) : '—'}</td>
+                <td className="px-4 py-2 text-right font-mono text-xs whitespace-nowrap">{r.periodCr ? formatNumber(r.periodCr) : '—'}</td>
+                <td className="px-4 py-2 text-right font-mono font-bold text-xs border-l border-gray-200 whitespace-nowrap">{r.closingDr ? formatNumber(r.closingDr) : '—'}</td>
+                <td className="px-4 py-2 text-right font-mono font-bold text-xs whitespace-nowrap">{r.closingCr ? formatNumber(r.closingCr) : '—'}</td>
               </tr>
             ))}
           </tbody>
           <tfoot className="bg-black text-white font-bold">
             <tr>
-              <td className="px-4 py-2 uppercase text-sm">Totals</td>
-              <td className="px-4 py-2 text-right font-mono border-l border-gray-600">{formatNumber(totals.openingDr)}</td>
-              <td className="px-4 py-2 text-right font-mono">{formatNumber(totals.openingCr)}</td>
-              <td className="px-4 py-2 text-right font-mono border-l border-gray-600">{formatNumber(totals.periodDr)}</td>
-              <td className="px-4 py-2 text-right font-mono">{formatNumber(totals.periodCr)}</td>
-              <td className="px-4 py-2 text-right font-mono border-l border-gray-600">{formatNumber(totals.closingDr)}</td>
-              <td className="px-4 py-2 text-right font-mono">{formatNumber(totals.closingCr)}</td>
+              <td className="px-4 py-2.5 uppercase text-sm">Totals</td>
+              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap">{formatNumber(totals.openingDr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totals.openingCr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap">{formatNumber(totals.periodDr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totals.periodCr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap">{formatNumber(totals.closingDr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totals.closingCr)}</td>
             </tr>
           </tfoot>
         </table>

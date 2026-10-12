@@ -1,84 +1,160 @@
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/cn';
+import { t, type LangMode } from '@/lib/i18n';
+import { useShop } from '@/stores/useShop';
+import { Home, Database, Receipt, BarChart3, Settings, ChevronDown } from 'lucide-react';
 
-const NAV_ITEMS = [
-  { label: 'HOME', path: '/' },
-  { label: 'BASIC DATA', children: [
-    { label: 'Chart of Accounts', path: '/coa' },
-    { label: 'Items', path: '/items' },
-    { label: 'Locations', path: '/locations' },
-    { label: 'Customers', path: '/customers' },
-    { label: 'Suppliers & Dyers', path: '/suppliers' },
-    { label: 'Employees', path: '/employees' },
+export interface NavChild {
+  key: string;
+  subKey?: string;
+  path: string;
+}
+
+export interface NavItem {
+  key: string;
+  path?: string;
+  icon: any;
+  children?: NavChild[];
+}
+
+export const NAV_ITEMS: NavItem[] = [
+  { key: 'home', path: '/', icon: Home },
+  { key: 'basicData', icon: Database, children: [
+    { key: 'chartOfAccounts', path: '/coa' },
+    { key: 'items', path: '/items' },
+    { key: 'locations', path: '/locations' },
+    { key: 'customers', path: '/customers' },
+    { key: 'suppliersDyers', path: '/suppliers' },
+    { key: 'employees', path: '/employees' },
   ]},
-  { label: 'TRANSACTIONS', children: [
-    { label: 'Sales Invoice', path: '/sales' },
-    { label: 'Purchase Voucher', path: '/purchase' },
-    { label: 'Dyeing Voucher', path: '/dyeing' },
-    { label: 'Stock Transfer', path: '/stock-transfer' },
-    { label: 'Receipt / Payment', path: '/vouchers/receipt-payment' },
-    { label: 'Journal Voucher', path: '/vouchers/journal' },
-    { label: 'Expenses', path: '/expenses' },
-    { label: 'Attendance', path: '/attendance' },
-    { label: 'Payroll', path: '/payroll' },
+  { key: 'transactions', icon: Receipt, children: [
+    { key: 'sales', subKey: 'invoice', path: '/sales' },
+    { key: 'purchase', subKey: 'voucher', path: '/purchase' },
+    { key: 'dyeing', subKey: 'voucher', path: '/dyeing' },
+    { key: 'stockTransfer', path: '/stock-transfer' },
+    { key: 'receiptPayment', path: '/vouchers/receipt-payment' },
+    { key: 'journalVoucher', path: '/vouchers/journal' },
+    { key: 'expenses', path: '/expenses' },
+    { key: 'attendance', path: '/attendance' },
+    { key: 'payroll', path: '/payroll' },
   ]},
-  { label: 'REPORTS', children: [
-    { label: 'Day Book', path: '/reports/daybook' },
-    { label: 'Cash Book', path: '/reports/cashbook' },
-    { label: 'Ledger', path: '/reports/ledger' },
-    { label: 'Trial Balance', path: '/reports/trial-balance' },
-    { label: 'Trial Balance 4-Col', path: '/reports/trial-balance-4col' },
-    { label: 'Profit & Loss', path: '/reports/profit-loss' },
-    { label: 'Stock / Item Ledger', path: '/reports/stock' },
-    { label: 'Debtors Report', path: '/reports/debtors' },
+  { key: 'reports', icon: BarChart3, children: [
+    { key: 'dayBook', path: '/reports/daybook' },
+    { key: 'cashBook', path: '/reports/cashbook' },
+    { key: 'ledger', path: '/reports/ledger' },
+    { key: 'trialBalance', path: '/reports/trial-balance' },
+    { key: 'trialBalance4Col', path: '/reports/trial-balance-4col' },
+    { key: 'profitLoss', path: '/reports/profit-loss' },
+    { key: 'stockReport', path: '/reports/stock' },
+    { key: 'debtorsReport', path: '/reports/debtors' },
   ]},
-  { label: 'SETTINGS', children: [
-    { label: 'Shop Settings', path: '/settings' },
-    { label: 'Manage Users', path: '/settings/users' },
+  { key: 'settings', icon: Settings, children: [
+    { key: 'shopSettings', path: '/settings' },
+    { key: 'manageUsers', path: '/settings/users' },
   ]},
 ];
 
-export function TopNav({ currentPath }: { currentPath: string }) {
+export function formatChildLabel(child: NavChild, lang: LangMode): string {
+  if (!child.subKey) return t(child.key, lang);
+  if (lang === 'en') return `${t(child.key, 'en')} ${t(child.subKey, 'en')}`;
+  if (lang === 'ur') return `${t(child.key, 'ur')} ${t(child.subKey, 'ur')}`;
+  return `${t(child.key, 'en')} ${t(child.subKey, 'en')} / ${t(child.key, 'ur')} ${t(child.subKey, 'ur')}`;
+}
+
+export function TopNav({ currentPath, lang }: { currentPath: string; lang?: LangMode }) {
   const navigate = useNavigate();
+  const { shop } = useShop();
+  const activeLang: LangMode = lang ?? shop.language ?? 'en';
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setOpenKey(null);
+  }, [currentPath]);
+
+  useEffect(() => {
+    function handleDocClick(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenKey(null);
+      }
+    }
+    document.addEventListener('mousedown', handleDocClick);
+    return () => document.removeEventListener('mousedown', handleDocClick);
+  }, []);
+
   return (
-    <nav className="border-b-2 border-black bg-white flex">
-      {NAV_ITEMS.map((item) => (
-        item.children ? (
-          <div key={item.label} className="relative group">
-            <button className={cn(
-              'px-4 py-2.5 text-xs font-sans font-semibold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors',
-              item.children.some(c => c.path === currentPath) && 'bg-black text-white'
-            )}>
-              {item.label} ▾
+    <nav ref={navRef} className="hidden md:flex border-b-2 border-black bg-white flex-wrap print:hidden sticky top-0 z-30">
+      {NAV_ITEMS.map((item) => {
+        const topLabel = t(item.key, activeLang);
+        const Icon = item.icon;
+        const isActiveGroup = item.children
+          ? item.children.some(c => currentPath === c.path || currentPath.startsWith(c.path + '/'))
+          : currentPath === item.path;
+        const isOpen = openKey === item.key;
+
+        return item.children ? (
+          <div
+            key={item.key}
+            className="relative group"
+            onMouseEnter={() => setOpenKey(item.key)}
+            onMouseLeave={() => setOpenKey(prev => (prev === item.key ? null : prev))}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenKey(prev => (prev === item.key ? null : item.key))}
+              className={cn(
+                'px-4 py-2.5 text-xs font-sans font-bold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2',
+                isActiveGroup && 'bg-black text-white'
+              )}
+            >
+              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span>{topLabel}</span>
+              <ChevronDown className={cn('w-3.5 h-3.5 transition-transform', isOpen && 'rotate-180')} />
             </button>
-            <div className="absolute top-full left-0 hidden group-hover:flex flex-col z-50 border-2 border-black bg-white shadow-brutal min-w-[200px]">
-              {item.children.map(child => (
-                <button
-                  key={child.path}
-                  onClick={() => navigate({ to: child.path as string })}
-                  className={cn(
-                    'px-4 py-2.5 text-xs font-sans text-left border-b border-black last:border-0 hover:bg-accent hover:text-black transition-colors whitespace-nowrap',
-                    currentPath === child.path && 'bg-accent'
-                  )}
-                >
-                  {child.label}
-                </button>
-              ))}
+            <div
+              className={cn(
+                'absolute top-full left-0 flex-col z-50 border-2 border-black bg-white shadow-brutal min-w-[220px]',
+                isOpen ? 'flex' : 'hidden group-hover:flex'
+              )}
+            >
+              {item.children.map(child => {
+                const childActive = currentPath === child.path || currentPath.startsWith(child.path + '/');
+                return (
+                  <button
+                    key={child.path}
+                    type="button"
+                    onClick={() => {
+                      setOpenKey(null);
+                      navigate({ to: child.path as string });
+                    }}
+                    className={cn(
+                      'px-4 py-2.5 text-xs font-sans font-medium text-left border-b border-black/20 last:border-0 hover:bg-accent hover:text-black transition-colors whitespace-nowrap flex items-center justify-between gap-3',
+                      childActive && 'bg-accent font-bold'
+                    )}
+                  >
+                    <span>{formatChildLabel(child, activeLang)}</span>
+                    {childActive && <span className="w-1.5 h-1.5 bg-black shrink-0" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (
           <button
-            key={item.label}
+            key={item.key}
+            type="button"
             onClick={() => navigate({ to: item.path as string })}
             className={cn(
-              'px-4 py-2.5 text-xs font-sans font-semibold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors',
-              currentPath === item.path && 'bg-black text-white'
+              'px-4 py-2.5 text-xs font-sans font-bold uppercase tracking-wider border-r-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2',
+              isActiveGroup && 'bg-black text-white'
             )}
           >
-            {item.label}
+            <Icon className="w-3.5 h-3.5 shrink-0" />
+            <span>{topLabel}</span>
           </button>
-        )
-      ))}
+        );
+      })}
     </nav>
   );
 }

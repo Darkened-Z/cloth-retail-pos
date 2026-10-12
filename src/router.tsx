@@ -8,6 +8,7 @@ import { ItemsPage } from '@/features/items/ItemsPage';
 import { CustomersPage } from '@/features/customers/CustomersPage';
 import { CustomerLedgerPage } from '@/features/customers/CustomerLedgerPage';
 import { SuppliersPage } from '@/features/suppliers/SuppliersPage';
+import { SupplierLedgerPage } from '@/features/suppliers/SupplierLedgerPage';
 import { SalesListPage } from '@/features/sales/SalesListPage';
 import { NewInvoicePage } from '@/features/sales/NewInvoicePage';
 import { PurchaseListPage } from '@/features/purchase/PurchaseListPage';
@@ -51,13 +52,16 @@ const itemsRoute       = createRoute({ getParentRoute: () => shellRoute, path: '
 const customersRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/customers',  component: CustomersPage });
 const customerLedger   = createRoute({ getParentRoute: () => shellRoute, path: '/customers/$id', component: CustomerLedgerPage });
 const suppliersRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/suppliers',  component: SuppliersPage });
+const supplierLedger   = createRoute({ getParentRoute: () => shellRoute, path: '/suppliers/$id', component: SupplierLedgerPage });
 const salesRoute       = createRoute({ getParentRoute: () => shellRoute, path: '/sales',      component: SalesListPage });
 const newSaleRoute     = createRoute({ getParentRoute: () => shellRoute, path: '/sales/new',  component: NewInvoicePage });
 const editSaleRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/sales/$id',  component: NewInvoicePage });
 const purchaseRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/purchase',   component: PurchaseListPage });
 const newPurchaseRoute = createRoute({ getParentRoute: () => shellRoute, path: '/purchase/new', component: NewPurchasePage });
+const editPurchaseRoute= createRoute({ getParentRoute: () => shellRoute, path: '/purchase/$id', component: NewPurchasePage });
 const dyeingRoute      = createRoute({ getParentRoute: () => shellRoute, path: '/dyeing',     component: DyeingListPage });
 const newDyeingRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/dyeing/new', component: NewDyeingPage });
+const editDyeingRoute  = createRoute({ getParentRoute: () => shellRoute, path: '/dyeing/$id', component: NewDyeingPage });
 const expensesRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/expenses',   component: ExpensesPage });
 const employeesRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/employees',  component: EmployeesPage });
 const attendanceRoute  = createRoute({ getParentRoute: () => shellRoute, path: '/attendance', component: AttendancePage });
@@ -82,10 +86,10 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     dashboardRoute, coaRoute, itemsRoute,
     customersRoute, customerLedger,
-    suppliersRoute,
+    suppliersRoute, supplierLedger,
     salesRoute, newSaleRoute, editSaleRoute,
-    purchaseRoute, newPurchaseRoute,
-    dyeingRoute, newDyeingRoute,
+    purchaseRoute, newPurchaseRoute, editPurchaseRoute,
+    dyeingRoute, newDyeingRoute, editDyeingRoute,
     expensesRoute, employeesRoute, attendanceRoute, payrollRoute,
     locationsRoute, stockTransferRoute,
     receiptPayRoute, journalRoute,

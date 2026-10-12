@@ -2,7 +2,7 @@ import type { Shop } from '@/types';
 
 export const mockShop: Shop = {
   id: 'shop-1',
-  name: 'MY STORE',
+  name: 'HAFIZ FABRICS',
   address: 'Main Cloth Market, Faisalabad',
   phone: '0300-1234567',
   ntn: '1234567-8',

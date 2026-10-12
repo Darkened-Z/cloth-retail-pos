@@ -4,6 +4,7 @@ import path from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
+  cacheDir: 'node_modules/.vite_cache',
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },

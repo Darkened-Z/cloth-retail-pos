@@ -12,16 +12,18 @@
 
   * {
     border-color: #000;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html,
   body,
   #root {
     height: 100%;
+    overflow-x: hidden;
   }
 
   body {
-    background: #fff;
+    background: #fafafa;
     color: #000;
     font-family: 'Space Grotesk', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -37,6 +39,22 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Crisp neo-brutalist scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f4f4f4;
+    border-left: 1px solid #000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #000;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ffb800;
+  }
 }
 
 @layer utilities {
@@ -45,10 +63,26 @@
   }
 
   .brutal-press {
-    transition: transform 80ms ease, box-shadow 80ms ease;
+    transition: transform 80ms ease, box-shadow 80ms ease, background-color 120ms ease, color 120ms ease;
   }
   .brutal-press:active {
-    transform: translate(4px, 4px);
+    transform: translate(2px, 2px);
+    box-shadow: none !important;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+  .shadow-brutal,
+  .shadow-brutal-sm,
+  .shadow-brutal-lg {
     box-shadow: none !important;
   }
 }

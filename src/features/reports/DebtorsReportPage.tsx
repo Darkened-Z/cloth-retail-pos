@@ -5,6 +5,7 @@ import { useVouchers } from '@/stores/useVouchers';
 import { usePurchase } from '@/stores/usePurchase';
 import { formatDate } from '@/lib/formatDate';
 import { formatNumber } from '@/lib/formatNumber';
+import { useKeyboardShortcuts } from '@/lib/shortcuts';
 
 type Tab = 'debtors' | 'receipt-report' | 'payment-report';
 
@@ -14,6 +15,10 @@ export function DebtorsReportPage() {
   const monthStart = today.slice(0, 8) + '01';
   const [from, setFrom] = useState(monthStart);
   const [to, setTo] = useState(today);
+
+  useKeyboardShortcuts({
+    'ctrl+p': () => window.print(),
+  });
 
   const { parties } = useParties();
   const { invoices } = useInvoices();
@@ -41,60 +46,66 @@ export function DebtorsReportPage() {
   const filteredPayments = payments.filter(p => p.date >= from && p.date <= to);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-4">
-      <h1 className="text-2xl font-black uppercase tracking-tight">Debtors & Party Reports</h1>
+    <div className="p-3 sm:p-6 max-w-5xl mx-auto space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="font-display text-2xl uppercase tracking-tight">Debtors & Party Reports</h1>
+        <button onClick={() => window.print()}
+          className="w-full sm:w-auto border-2 border-black bg-white hover:bg-accent px-4 py-2 font-mono text-xs font-bold uppercase shadow-brutal-sm brutal-press">
+          PRINT (Ctrl+P)
+        </button>
+      </div>
 
-      <div className="flex border-2 border-black w-fit">
+      <div className="flex border-2 border-black w-full sm:w-fit bg-white shadow-brutal-sm overflow-x-auto">
         {([
           ['debtors', 'Debtors Report'],
           ['receipt-report', 'Receipt Report'],
           ['payment-report', 'Payment Report'],
         ] as [Tab, string][]).map(([t, label]) => (
           <button key={t} onClick={() => setTab(t)}
-            className={`px-5 py-2 text-xs font-bold uppercase border-r-2 border-black last:border-0 ${tab === t ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}>
+            className={`flex-1 sm:flex-initial px-3 sm:px-5 py-2 text-xs font-bold uppercase border-r-2 border-black last:border-0 whitespace-nowrap ${tab === t ? 'bg-black text-white' : 'bg-white hover:bg-accent'}`}>
             {label}
           </button>
         ))}
       </div>
 
       {tab === 'debtors' && (
-        <div className="space-y-3">
-          <div className="border-2 border-black p-3 bg-accent/20">
-            <p className="text-xs font-bold uppercase">Total Outstanding Receivable</p>
-            <p className="text-3xl font-black font-mono">{formatNumber(totalOutstanding)}</p>
+        <div className="space-y-4">
+          <div className="bg-white border-2 border-black shadow-brutal p-4">
+            <p className="text-xs font-mono font-bold uppercase text-gray-500">Total Outstanding Receivable</p>
+            <p className="text-2xl sm:text-3xl font-display font-mono mt-1 text-danger whitespace-nowrap">PKR {formatNumber(totalOutstanding)}</p>
           </div>
-          <div className="border-2 border-black">
-            <table className="w-full text-sm">
+          <div className="border-2 border-black shadow-brutal overflow-x-auto bg-white">
+            <table className="w-full min-w-[580px] text-sm">
               <thead className="bg-black text-white">
                 <tr>
-                  <th className="text-left px-4 py-2 font-bold uppercase">Customer</th>
-                  <th className="text-left px-4 py-2 font-bold uppercase">Phone</th>
-                  <th className="text-right px-4 py-2 font-bold uppercase">Opening</th>
-                  <th className="text-right px-4 py-2 font-bold uppercase">Sales</th>
-                  <th className="text-right px-4 py-2 font-bold uppercase">Receipts</th>
-                  <th className="text-right px-4 py-2 font-bold uppercase">Balance</th>
+                  <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Customer</th>
+                  <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Phone</th>
+                  <th className="text-right px-4 py-2.5 font-bold uppercase whitespace-nowrap">Opening</th>
+                  <th className="text-right px-4 py-2.5 font-bold uppercase whitespace-nowrap">Sales</th>
+                  <th className="text-right px-4 py-2.5 font-bold uppercase whitespace-nowrap">Receipts</th>
+                  <th className="text-right px-4 py-2.5 font-bold uppercase whitespace-nowrap">Balance</th>
                 </tr>
               </thead>
               <tbody>
                 {debtorRows.map((c, i) => (
-                  <tr key={c.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <tr key={c.id} className={`border-b border-black/20 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                     <td className="px-4 py-2 font-bold">{c.name}</td>
-                    <td className="px-4 py-2 text-gray-500 text-xs">{c.phone}</td>
-                    <td className="px-4 py-2 text-right font-mono">{formatNumber(c.openingBalance)}</td>
-                    <td className="px-4 py-2 text-right font-mono">{formatNumber(c.totalSales)}</td>
-                    <td className="px-4 py-2 text-right font-mono text-green-700">{formatNumber(c.totalReceipts)}</td>
-                    <td className="px-4 py-2 text-right font-mono font-black text-red-600">{formatNumber(c.balance)}</td>
+                    <td className="px-4 py-2 text-gray-500 font-mono text-xs whitespace-nowrap">{c.phone}</td>
+                    <td className="px-4 py-2 text-right font-mono whitespace-nowrap">{formatNumber(c.openingBalance)}</td>
+                    <td className="px-4 py-2 text-right font-mono whitespace-nowrap">{formatNumber(c.totalSales)}</td>
+                    <td className="px-4 py-2 text-right font-mono text-green-700 whitespace-nowrap">{formatNumber(c.totalReceipts)}</td>
+                    <td className="px-4 py-2 text-right font-mono font-black text-red-600 whitespace-nowrap">{formatNumber(c.balance)}</td>
                   </tr>
                 ))}
                 {debtorRows.length === 0 && (
-                  <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm">No outstanding debtors</td></tr>
+                  <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm font-mono">No outstanding debtors</td></tr>
                 )}
               </tbody>
               {debtorRows.length > 0 && (
-                <tfoot className="bg-gray-100 border-t-2 border-black font-bold">
+                <tfoot className="bg-black text-white border-t-2 border-black font-bold">
                   <tr>
-                    <td colSpan={5} className="px-4 py-2 text-right text-sm uppercase">Total Outstanding</td>
-                    <td className="px-4 py-2 text-right font-mono font-black text-red-600">{formatNumber(totalOutstanding)}</td>
+                    <td colSpan={5} className="px-4 py-2.5 text-right text-sm uppercase">Total Outstanding</td>
+                    <td className="px-4 py-2.5 text-right font-mono font-black whitespace-nowrap">{formatNumber(totalOutstanding)}</td>
                   </tr>
                 </tfoot>
               )}
@@ -104,53 +115,53 @@ export function DebtorsReportPage() {
       )}
 
       {(tab === 'receipt-report' || tab === 'payment-report') && (
-        <div className="space-y-3">
-          <div className="flex gap-4 items-end">
-            <div>
-              <label className="block text-xs font-bold uppercase mb-1">From</label>
+        <div className="space-y-4">
+          <div className="bg-white border-2 border-black shadow-brutal p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-end">
+            <div className="flex-1 sm:flex-initial">
+              <label className="block text-xs font-mono font-bold uppercase mb-1">From</label>
               <input type="date" value={from} onChange={e => setFrom(e.target.value)}
-                className="border-2 border-black px-3 py-2 text-sm focus:outline-none" />
+                className="w-full sm:w-auto border-2 border-black px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent" />
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase mb-1">To</label>
+            <div className="flex-1 sm:flex-initial">
+              <label className="block text-xs font-mono font-bold uppercase mb-1">To</label>
               <input type="date" value={to} onChange={e => setTo(e.target.value)}
-                className="border-2 border-black px-3 py-2 text-sm focus:outline-none" />
+                className="w-full sm:w-auto border-2 border-black px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent" />
             </div>
           </div>
 
           {tab === 'receipt-report' && (
-            <div className="border-2 border-black">
-              <table className="w-full text-sm">
+            <div className="border-2 border-black shadow-brutal overflow-x-auto bg-white">
+              <table className="w-full min-w-[580px] text-sm">
                 <thead className="bg-black text-white">
                   <tr>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Serial</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Date</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Customer</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Mode</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Description</th>
-                    <th className="text-right px-4 py-2 font-bold uppercase">Amount</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Serial</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Date</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Customer</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Mode</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase">Description</th>
+                    <th className="text-right px-4 py-2.5 font-bold uppercase whitespace-nowrap">Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredReceipts.map((r, i) => (
-                    <tr key={r.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-4 py-2 font-mono text-xs">{r.serial}</td>
-                      <td className="px-4 py-2">{formatDate(r.date)}</td>
-                      <td className="px-4 py-2 font-bold">{partyMap[r.partyId] ?? r.partyId}</td>
-                      <td className="px-4 py-2 uppercase text-xs">{r.receivedIn}</td>
+                    <tr key={r.id} className={`border-b border-black/20 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                      <td className="px-4 py-2 font-mono text-xs font-bold whitespace-nowrap">{r.serial}</td>
+                      <td className="px-4 py-2 whitespace-nowrap font-mono text-xs">{formatDate(r.date)}</td>
+                      <td className="px-4 py-2 font-bold whitespace-nowrap">{partyMap[r.partyId] ?? r.partyId}</td>
+                      <td className="px-4 py-2 uppercase text-xs font-mono whitespace-nowrap">{r.receivedIn}</td>
                       <td className="px-4 py-2 text-xs text-gray-600">{r.description}</td>
-                      <td className="px-4 py-2 text-right font-mono font-bold">{formatNumber(r.amount)}</td>
+                      <td className="px-4 py-2 text-right font-mono font-bold whitespace-nowrap">{formatNumber(r.amount)}</td>
                     </tr>
                   ))}
                   {filteredReceipts.length === 0 && (
-                    <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm">No receipts in this period</td></tr>
+                    <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm font-mono">No receipts in this period</td></tr>
                   )}
                 </tbody>
                 {filteredReceipts.length > 0 && (
-                  <tfoot className="bg-gray-100 border-t-2 border-black">
+                  <tfoot className="bg-black text-white border-t-2 border-black">
                     <tr>
-                      <td colSpan={5} className="px-4 py-2 text-right font-bold uppercase text-sm">Total</td>
-                      <td className="px-4 py-2 text-right font-mono font-black">{formatNumber(filteredReceipts.reduce((s, r) => s + r.amount, 0))}</td>
+                      <td colSpan={5} className="px-4 py-2.5 text-right font-bold uppercase text-sm">Total</td>
+                      <td className="px-4 py-2.5 text-right font-mono font-black whitespace-nowrap">{formatNumber(filteredReceipts.reduce((s, r) => s + r.amount, 0))}</td>
                     </tr>
                   </tfoot>
                 )}
@@ -159,38 +170,38 @@ export function DebtorsReportPage() {
           )}
 
           {tab === 'payment-report' && (
-            <div className="border-2 border-black">
-              <table className="w-full text-sm">
+            <div className="border-2 border-black shadow-brutal overflow-x-auto bg-white">
+              <table className="w-full min-w-[580px] text-sm">
                 <thead className="bg-black text-white">
                   <tr>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Serial</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Date</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Party</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Mode</th>
-                    <th className="text-left px-4 py-2 font-bold uppercase">Description</th>
-                    <th className="text-right px-4 py-2 font-bold uppercase">Amount</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Serial</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Date</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Party</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase whitespace-nowrap">Mode</th>
+                    <th className="text-left px-4 py-2.5 font-bold uppercase">Description</th>
+                    <th className="text-right px-4 py-2.5 font-bold uppercase whitespace-nowrap">Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredPayments.map((p, i) => (
-                    <tr key={p.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-4 py-2 font-mono text-xs">{p.serial}</td>
-                      <td className="px-4 py-2">{formatDate(p.date)}</td>
-                      <td className="px-4 py-2 font-bold">{partyMap[p.partyId] ?? p.partyId}</td>
-                      <td className="px-4 py-2 uppercase text-xs">{p.paidFrom}</td>
+                    <tr key={p.id} className={`border-b border-black/20 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                      <td className="px-4 py-2 font-mono text-xs font-bold whitespace-nowrap">{p.serial}</td>
+                      <td className="px-4 py-2 whitespace-nowrap font-mono text-xs">{formatDate(p.date)}</td>
+                      <td className="px-4 py-2 font-bold whitespace-nowrap">{partyMap[p.partyId] ?? p.partyId}</td>
+                      <td className="px-4 py-2 uppercase text-xs font-mono whitespace-nowrap">{p.paidFrom}</td>
                       <td className="px-4 py-2 text-xs text-gray-600">{p.description}</td>
-                      <td className="px-4 py-2 text-right font-mono font-bold">{formatNumber(p.amount)}</td>
+                      <td className="px-4 py-2 text-right font-mono font-bold whitespace-nowrap">{formatNumber(p.amount)}</td>
                     </tr>
                   ))}
                   {filteredPayments.length === 0 && (
-                    <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm">No payments in this period</td></tr>
+                    <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm font-mono">No payments in this period</td></tr>
                   )}
                 </tbody>
                 {filteredPayments.length > 0 && (
-                  <tfoot className="bg-gray-100 border-t-2 border-black">
+                  <tfoot className="bg-black text-white border-t-2 border-black">
                     <tr>
-                      <td colSpan={5} className="px-4 py-2 text-right font-bold uppercase text-sm">Total</td>
-                      <td className="px-4 py-2 text-right font-mono font-black">{formatNumber(filteredPayments.reduce((s, p) => s + p.amount, 0))}</td>
+                      <td colSpan={5} className="px-4 py-2.5 text-right font-bold uppercase text-sm">Total</td>
+                      <td className="px-4 py-2.5 text-right font-mono font-black whitespace-nowrap">{formatNumber(filteredPayments.reduce((s, p) => s + p.amount, 0))}</td>
                     </tr>
                   </tfoot>
                 )}

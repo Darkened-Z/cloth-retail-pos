@@ -12,6 +12,7 @@ interface EmployeesState {
   removeEmployee: (id: string) => void;
   markAttendance: (r: AttendanceRecord) => void;
   addAdvance: (a: Advance) => void;
+  removeAdvance: (id: string) => void;
   savePayrollRun: (r: PayrollRun) => void;
 }
 
@@ -33,6 +34,7 @@ export const useEmployees = create<EmployeesState>((set) => ({
   }),
 
   addAdvance: (a) => set(s => { const u = [...s.advances, a]; storage.set('advances', u); return { advances: u }; }),
+  removeAdvance: (id) => set(s => { const u = s.advances.filter(x => x.id !== id); storage.set('advances', u); return { advances: u }; }),
 
   savePayrollRun: (r) => set(s => {
     const existing = s.payrollRuns.filter(x => !(x.month === r.month && x.employeeId === r.employeeId));
