@@ -1,3 +1,5 @@
+import { pushKeyToSupabase } from './supabase';
+
 export const storage = {
   get<T>(key: string): T | null {
     try {
@@ -6,7 +8,10 @@ export const storage = {
     } catch { return null; }
   },
   set<T>(key: string, value: T): void {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota */ }
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      void pushKeyToSupabase(key, value);
+    } catch { /* quota */ }
   },
   remove(key: string): void { localStorage.removeItem(key); },
   clear(): void { localStorage.clear(); },

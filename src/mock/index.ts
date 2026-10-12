@@ -61,7 +61,39 @@ export function seedAll() {
 }
 
 export function resetAll() {
+  const sbCfg = localStorage.getItem('supabase_config_v1');
+  const curUser = localStorage.getItem('currentUser');
   storage.clear();
+  if (sbCfg) localStorage.setItem('supabase_config_v1', sbCfg);
+  if (curUser) localStorage.setItem('currentUser', curUser);
   seedAll();
+  window.location.reload();
+}
+
+export function startEmptyShop() {
+  storage.set('accountMasters', mockAccountMasters);
+  storage.set('accountSubs', mockAccountSubs);
+  storage.set(
+    'accounts',
+    mockAccounts.map(a => ({ ...a, openingBalance: 0, currentBalance: 0 }))
+  );
+  storage.set('itemMasters', mockItemMasters);
+  storage.set('itemSubs', mockItemSubs);
+  storage.set('items', []);
+  storage.set('parties', []);
+  storage.set('invoices', []);
+  storage.set('purchaseVouchers', []);
+  storage.set('dyeingVouchers', []);
+  storage.set('expenses', []);
+  storage.set('employees', []);
+  storage.set('attendance', []);
+  storage.set('advances', []);
+  storage.set('payrollRuns', []);
+  storage.set('locations', mockLocations);
+  storage.set('stockTransfers', []);
+  storage.set('receiptVouchers', []);
+  storage.set('paymentVouchers', []);
+  storage.set('journalVouchers', []);
+  storage.set('seeded_v5', true);
   window.location.reload();
 }
