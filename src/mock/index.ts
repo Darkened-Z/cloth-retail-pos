@@ -34,7 +34,7 @@ export {
 };
 
 export function seedAll() {
-  if (storage.get('seeded_v3')) return;
+  if (storage.get('seeded_v4')) return;
   storage.set('shop', mockShop);
   storage.set('users', mockUsers);
   storage.set('accountMasters', mockAccountMasters);
@@ -57,7 +57,7 @@ export function seedAll() {
   storage.set('receiptVouchers', mockReceiptVouchers);
   storage.set('paymentVouchers', mockPaymentVouchers);
   storage.set('journalVouchers', mockJournalVouchers);
-  storage.set('seeded_v3', true);
+  storage.set('seeded_v4', true);
 }
 
 export function resetAll() {

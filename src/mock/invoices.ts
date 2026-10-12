@@ -55,6 +55,10 @@ for (let d = 7; d <= 27; d++) for (let i = 0; i < (d % 3 === 0 ? 3 : 2); i++) da
 for (let d = 28; d <= 58; d++) for (let i = 0; i < (d % 3 === 0 ? 2 : 1); i++) dayOffsets.push(d);
 // Days 59-89 (two months ago): 1 every other day
 for (let d = 59; d <= 89; d += 2) dayOffsets.push(d);
+// Days 90-179 (months 3-6): 1 every 3 days
+for (let d = 90; d <= 179; d += 3) dayOffsets.push(d);
+// Days 180-364 (months 6-12): 1 every 5 days
+for (let d = 180; d <= 364; d += 5) dayOffsets.push(d);
 
 export const mockInvoices: SalesInvoice[] = dayOffsets
   .map((daysAgo, i) => makeInvoice(i, daysAgo))
