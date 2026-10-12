@@ -370,8 +370,8 @@ export function Shell() {
         </div>
       )}
 
-      {/* Main Content Area (padded on bottom for mobile bottom nav) */}
-      <main className="flex-1 overflow-x-hidden overflow-y-auto pb-16 md:pb-0">
+      {/* Main Content Area (padded on bottom for mobile bottom nav and desktop fixed shortcut footer) */}
+      <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 md:pb-14">
         <Outlet />
       </main>
 
