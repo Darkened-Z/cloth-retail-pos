@@ -49,4 +49,7 @@ export const mockAccounts: Account[] = [
   { id: 'A811', subId: 'AS81', name: 'Gas Bill',              openingBalance: 0,       currentBalance: 0 },
   { id: 'A820', subId: 'AS82', name: 'Shop Rent',             openingBalance: 0,       currentBalance: 0 },
   { id: 'A830', subId: 'AS83', name: 'Miscellaneous Expense', openingBalance: 0,       currentBalance: 0 },
+  { id: 'A831', subId: 'AS83', name: 'Repair & Maintenance',   openingBalance: 0,       currentBalance: 0 },
+  { id: 'A832', subId: 'AS83', name: 'Packaging Supplies',     openingBalance: 0,       currentBalance: 0 },
+  { id: 'A833', subId: 'AS83', name: 'Transport / Freight',    openingBalance: 0,       currentBalance: 0 },
 ];

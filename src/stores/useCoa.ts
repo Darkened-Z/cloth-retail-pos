@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { storage } from '@/lib/storage';
+import { mockAccounts } from '@/mock/accounts';
 import type { AccountMaster, AccountSub, Account } from '@/types';
 
 interface CoaState {
@@ -20,7 +21,14 @@ interface CoaState {
 export const useCoa = create<CoaState>((set) => ({
   masters: storage.get<AccountMaster[]>('accountMasters') ?? [],
   subs: storage.get<AccountSub[]>('accountSubs') ?? [],
-  accounts: storage.get<Account[]>('accounts') ?? [],
+  accounts: (() => {
+    const saved = storage.get<Account[]>('accounts');
+    if (!saved || saved.length === 0 || !saved.some(a => a.id === 'A831')) {
+      storage.set('accounts', mockAccounts);
+      return mockAccounts;
+    }
+    return saved;
+  })(),
   addMaster: (m) => set(s => { const u = [...s.masters, m]; storage.set('accountMasters', u); return { masters: u }; }),
   updateMaster: (m) => set(s => { const u = s.masters.map(x => x.id === m.id ? m : x); storage.set('accountMasters', u); return { masters: u }; }),
   removeMaster: (id) => set(s => { const u = s.masters.filter(x => x.id !== id); storage.set('accountMasters', u); return { masters: u }; }),

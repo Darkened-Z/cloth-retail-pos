@@ -101,11 +101,29 @@ export function TrialBalancePage() {
     });
 
     // 2. Compute closing Debit and Credit balances per account
-    const calculatedRows: TrialBalanceRow[] = accounts
+    const knownAccountIds = new Set(accounts.map(a => a.id));
+    const allAccounts = [...accounts];
+    for (const id of Object.keys(movements)) {
+      if (!knownAccountIds.has(id)) {
+        const fallbackName = id === 'A831' ? 'Repair & Maintenance'
+          : id === 'A832' ? 'Packaging Supplies'
+          : id === 'A833' ? 'Transport / Freight'
+          : `Account ${id}`;
+        allAccounts.push({
+          id,
+          subId: 'AS83',
+          name: fallbackName,
+          openingBalance: 0,
+          currentBalance: 0,
+        });
+      }
+    }
+
+    const calculatedRows: TrialBalanceRow[] = allAccounts
       .map(acc => {
         const sub = accountSubs.find(s => s.id === acc.subId);
         const master = accountMasters.find(m => m.id === sub?.masterId);
-        const nature = master?.nature ?? '';
+        const nature = master?.nature ?? (acc.id.startsWith('A8') || acc.id.startsWith('A7') ? 'Expenses' : acc.id.startsWith('A4') || acc.id.startsWith('A5') || acc.id.startsWith('A3') ? 'Assets' : acc.id.startsWith('A6') ? 'Incomes' : 'Liabilities');
 
         const openingDr = acc.openingBalance > 0 && ['Assets', 'Expenses'].includes(nature) ? acc.openingBalance : 0;
         const openingCr = acc.openingBalance > 0 && ['Capital', 'Liabilities', 'Incomes'].includes(nature) ? acc.openingBalance : 0;
