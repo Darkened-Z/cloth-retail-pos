@@ -21,9 +21,9 @@ export const mockParties: Party[] = [
   { id: 'P101', type: 'supplier', name: 'MASTER WEAVING MILLS',  phone: '0321-1112233', address: 'Nishatabad, Faisalabad',     openingBalance: 250000, currentBalance: 76225,  creditDays: 30 },
   { id: 'P102', type: 'supplier', name: 'AL-REHMAN TEXTILES',    phone: '0322-2223344', address: 'Sheikhupura Road, Lahore',   openingBalance: 160000, currentBalance: 66325,  creditDays: 45 },
   { id: 'P103', type: 'supplier', name: 'CHAUDHRY MILLS',        phone: '0323-3334455', address: 'Industrial Estate, FSD',     openingBalance: 160000, currentBalance: 54950,  creditDays: 30 },
-  // Dyers (Opening Cr Total: PKR 80,000; Total Suppliers + Dyers Opening = PKR 650,000 matches A200)
-  { id: 'P201', type: 'dyer', name: 'NAZAKAT DYEING',            phone: '0331-1112233', address: 'Millat Road, Faisalabad',   openingBalance: 20000,  currentBalance: 4423,   creditDays: 15 },
-  { id: 'P202', type: 'dyer', name: 'RS DYEING',                 phone: '0332-2223344', address: 'Canal Road, Faisalabad',    openingBalance: 15000,  currentBalance: 6339,   creditDays: 15 },
-  { id: 'P203', type: 'dyer', name: 'HQ DYEING',                 phone: '0333-3334455', address: 'Ghulam Muhammad Abad, FSD', openingBalance: 35000,  currentBalance: 8997,   creditDays: 15 },
-  { id: 'P204', type: 'dyer', name: 'FAZAL-E-RABBI DYEING',      phone: '0334-4445566', address: 'Satiana Road, Faisalabad',  openingBalance: 10000,  currentBalance: 9885,   creditDays: 15 },
+  // Dyers (Opening Cr Total: PKR 80,000; Total Suppliers + Dyers Opening = PKR 650,000 matches A200; Current Total: PKR 252,870)
+  { id: 'P201', type: 'dyer', name: 'NAZAKAT DYEING',            phone: '0331-1112233', address: 'Millat Road, Faisalabad',   openingBalance: 20000,  currentBalance: 10835,  creditDays: 15 },
+  { id: 'P202', type: 'dyer', name: 'RS DYEING',                 phone: '0332-2223344', address: 'Canal Road, Faisalabad',    openingBalance: 15000,  currentBalance: 13415,  creditDays: 15 },
+  { id: 'P203', type: 'dyer', name: 'HQ DYEING',                 phone: '0333-3334455', address: 'Ghulam Muhammad Abad, FSD', openingBalance: 35000,  currentBalance: 16185,  creditDays: 15 },
+  { id: 'P204', type: 'dyer', name: 'FAZAL-E-RABBI DYEING',      phone: '0334-4445566', address: 'Satiana Road, Faisalabad',  openingBalance: 10000,  currentBalance: 14935,  creditDays: 15 },
 ];

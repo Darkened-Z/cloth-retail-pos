@@ -15,7 +15,7 @@ function save(parties: Party[]) { storage.set('parties', parties); }
 export const useParties = create<PartiesState>((set) => ({
   parties: (() => {
     const saved = storage.get<Party[]>('parties');
-    if (!saved || saved.length === 0 || saved[0]?.openingBalance !== 150000) {
+    if (!saved || saved.length === 0 || saved[0]?.openingBalance !== 150000 || saved.find(p => p.id === 'P201')?.currentBalance !== 10835) {
       storage.set('parties', mockParties);
       return mockParties;
     }
