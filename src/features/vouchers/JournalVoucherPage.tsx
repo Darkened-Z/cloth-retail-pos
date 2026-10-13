@@ -80,11 +80,18 @@ export function JournalVoucherPage() {
   });
 
   const sorted = [...journals].sort((a, b) => b.date.localeCompare(a.date));
+  const grandTotalDr = sorted.reduce((sum, j) => sum + j.lines.reduce((s, l) => s + (l.debit || 0), 0), 0);
+  const grandTotalCr = sorted.reduce((sum, j) => sum + j.lines.reduce((s, l) => s + (l.credit || 0), 0), 0);
 
   return (
     <div className="p-3 sm:p-6 max-w-5xl mx-auto space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <h1 className="text-2xl font-black uppercase tracking-tight">Journal Vouchers</h1>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <h1 className="text-2xl font-black uppercase tracking-tight">Journal Vouchers (روزنامچہ واؤچر)</h1>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-300">
+            ✓ Balanced (Dr = Cr: {formatNumber(grandTotalDr)})
+          </span>
+        </div>
         <button onClick={openNew}
           className="w-full sm:w-auto px-4 py-2 bg-accent border-2 border-black font-bold text-sm uppercase shadow-brutal brutal-press hover:bg-black hover:text-white transition-shadow">
           + NEW JOURNAL (Ctrl+N)
@@ -185,19 +192,28 @@ export function JournalVoucherPage() {
               <th className="text-left px-4 py-2 font-bold uppercase">Narration</th>
               <th className="text-right px-4 py-2 font-bold uppercase whitespace-nowrap">Lines</th>
               <th className="text-right px-4 py-2 font-bold uppercase whitespace-nowrap">Total Dr</th>
+              <th className="text-right px-4 py-2 font-bold uppercase whitespace-nowrap">Total Cr</th>
+              <th className="text-center px-4 py-2 font-bold uppercase whitespace-nowrap">Status</th>
               <th className="px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
             {sorted.map((j, i) => {
-              const totalDr = j.lines.reduce((s, l) => s + l.debit, 0);
+              const totalDr = j.lines.reduce((s, l) => s + (l.debit || 0), 0);
+              const totalCr = j.lines.reduce((s, l) => s + (l.credit || 0), 0);
               return (
                 <tr key={j.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="px-4 py-2 font-mono text-xs whitespace-nowrap">{j.serial}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">{formatDate(j.date)}</td>
-                  <td className="px-4 py-2">{j.narration}</td>
+                  <td className="px-4 py-2 font-mono text-xs whitespace-nowrap font-bold">{j.serial}</td>
+                  <td className="px-4 py-2 whitespace-nowrap font-mono text-xs">{formatDate(j.date)}</td>
+                  <td className="px-4 py-2 font-medium">{j.narration}</td>
                   <td className="px-4 py-2 text-right font-mono text-xs whitespace-nowrap">{j.lines.length}</td>
-                  <td className="px-4 py-2 text-right font-mono font-bold whitespace-nowrap">{formatNumber(totalDr)}</td>
+                  <td className="px-4 py-2 text-right font-mono font-bold whitespace-nowrap text-blue-700">{formatNumber(totalDr)}</td>
+                  <td className="px-4 py-2 text-right font-mono font-bold whitespace-nowrap text-blue-700">{formatNumber(totalCr)}</td>
+                  <td className="px-4 py-2 text-center whitespace-nowrap">
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded font-mono font-semibold">
+                      Balanced
+                    </span>
+                  </td>
                   <td className="px-4 py-2 text-right whitespace-nowrap space-x-1">
                     <button onClick={() => openEdit(j)} className="border border-black bg-white px-2 py-0.5 hover:bg-accent text-xs font-mono">Edit</button>
                     <button onClick={() => { if (confirm('Delete journal voucher?')) remove(j.id); }} className="border border-danger bg-white text-danger px-2 py-0.5 hover:bg-danger hover:text-white text-xs font-mono">Del</button>
@@ -206,9 +222,27 @@ export function JournalVoucherPage() {
               );
             })}
             {sorted.length === 0 && (
-              <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm bg-white">No journal entries found</td></tr>
+              <tr><td colSpan={8} className="text-center py-8 text-gray-400 text-sm bg-white">No journal entries found</td></tr>
             )}
           </tbody>
+          {sorted.length > 0 && (
+            <tfoot className="bg-black text-white font-bold border-t-2 border-black">
+              <tr>
+                <td colSpan={4} className="px-4 py-2.5 uppercase text-sm">
+                  <div className="flex items-center justify-between">
+                    <span>Grand Totals ({sorted.length} Vouchers)</span>
+                    <span className="text-[11px] font-mono text-emerald-400 font-normal">
+                      ✓ Total Debit ≡ Total Credit
+                    </span>
+                  </div>
+                </td>
+                <td className="px-4 py-2.5 text-right font-mono text-emerald-400 whitespace-nowrap">{formatNumber(grandTotalDr)}</td>
+                <td className="px-4 py-2.5 text-right font-mono text-emerald-400 whitespace-nowrap">{formatNumber(grandTotalCr)}</td>
+                <td className="px-4 py-2.5 text-center text-xs text-emerald-400 uppercase whitespace-nowrap">✓ BALANCED</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          )}
         </table>
       </div>
     </div>

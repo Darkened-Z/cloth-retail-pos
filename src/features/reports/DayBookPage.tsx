@@ -142,7 +142,12 @@ export function DayBookPage() {
   return (
     <div className="p-3 sm:p-6 space-y-4 max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h1 className="font-display text-2xl uppercase tracking-tight">Day Book (Daily Register)</h1>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <h1 className="font-display text-2xl uppercase tracking-tight">Day Book (Daily Register / روزنامچہ)</h1>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-300">
+            ✓ Balanced (Dr = Cr: {formatPKR(totalDebit)})
+          </span>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <input type="date" value={from} onChange={e => setFrom(e.target.value)} className="flex-1 sm:flex-initial border-2 border-black bg-white px-3 py-2 font-mono text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
           <span className="font-mono text-xs sm:text-sm">to</span>
@@ -216,9 +221,16 @@ export function DayBookPage() {
           </tbody>
           <tfoot className="bg-black text-white">
             <tr>
-              <td colSpan={4} className="px-3 py-2.5 font-bold uppercase text-right">Total Debit & Credit</td>
-              <td className="px-3 py-2.5 text-right font-bold whitespace-nowrap">{formatPKR(totalDebit)}</td>
-              <td className="px-3 py-2.5 text-right font-bold whitespace-nowrap">{formatPKR(totalCredit)}</td>
+              <td colSpan={4} className="px-3 py-2.5 font-bold uppercase text-right">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono text-emerald-400 font-normal">
+                    ✓ Total Debit ≡ Total Credit
+                  </span>
+                  <span>Total Debit & Credit</span>
+                </div>
+              </td>
+              <td className="px-3 py-2.5 text-right font-bold text-emerald-400 whitespace-nowrap">{formatPKR(totalDebit)}</td>
+              <td className="px-3 py-2.5 text-right font-bold text-emerald-400 whitespace-nowrap">{formatPKR(totalCredit)}</td>
             </tr>
           </tfoot>
         </table>

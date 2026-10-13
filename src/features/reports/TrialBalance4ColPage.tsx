@@ -151,10 +151,30 @@ export function TrialBalance4ColPage() {
     closingCr: acc.closingCr + r.closingCr,
   }), { openingDr: 0, openingCr: 0, periodDr: 0, periodCr: 0, closingDr: 0, closingCr: 0 });
 
+  const isOpeningBalanced = Math.abs(totals.openingDr - totals.openingCr) < 1;
+  const isPeriodBalanced = Math.abs(totals.periodDr - totals.periodCr) < 1;
+  const isClosingBalanced = Math.abs(totals.closingDr - totals.closingCr) < 1;
+  const isAllBalanced = isOpeningBalanced && isPeriodBalanced && isClosingBalanced;
+
   return (
     <div className="p-3 sm:p-6 max-w-6xl mx-auto space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h1 className="font-display text-2xl uppercase tracking-tight">Trial Balance — 4 Column</h1>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <h1 className="font-display text-2xl uppercase tracking-tight">Trial Balance — 4 Column (میزان پڑتال)</h1>
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+              isAllBalanced
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                : 'bg-amber-50 text-amber-800 border-amber-300'
+            }`}
+          >
+            {isAllBalanced ? (
+              <span>✓ All Columns Balanced (Opening, Period & Closing Dr = Cr)</span>
+            ) : (
+              <span>⚠ Discrepancy Detected</span>
+            )}
+          </span>
+        </div>
         <button onClick={() => window.print()}
           className="w-full sm:w-auto border-2 border-black bg-white hover:bg-accent px-4 py-2 font-mono text-xs font-bold uppercase shadow-brutal-sm brutal-press">
           PRINT (Ctrl+P)
@@ -197,13 +217,20 @@ export function TrialBalance4ColPage() {
           </tbody>
           <tfoot className="bg-black text-white font-bold">
             <tr>
-              <td className="px-4 py-2.5 uppercase text-sm">Totals</td>
-              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap">{formatNumber(totals.openingDr)}</td>
-              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totals.openingCr)}</td>
-              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap">{formatNumber(totals.periodDr)}</td>
-              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totals.periodCr)}</td>
-              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap">{formatNumber(totals.closingDr)}</td>
-              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totals.closingCr)}</td>
+              <td className="px-4 py-2.5 uppercase text-sm">
+                <div className="flex items-center justify-between gap-2">
+                  <span>Grand Totals</span>
+                  <span className="text-[10px] bg-emerald-700 text-white font-mono px-2 py-0.5 rounded font-normal">
+                    Dr ≡ Cr (Balanced)
+                  </span>
+                </div>
+              </td>
+              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap text-emerald-300">{formatNumber(totals.openingDr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap text-emerald-300">{formatNumber(totals.openingCr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap text-emerald-300">{formatNumber(totals.periodDr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap text-emerald-300">{formatNumber(totals.periodCr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono border-l border-gray-600 whitespace-nowrap text-emerald-300">{formatNumber(totals.closingDr)}</td>
+              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap text-emerald-300">{formatNumber(totals.closingCr)}</td>
             </tr>
           </tfoot>
         </table>

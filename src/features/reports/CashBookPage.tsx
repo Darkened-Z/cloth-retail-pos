@@ -132,10 +132,18 @@ export function CashBookPage() {
 
   let running = openingCash;
 
+  const reconciledDebitTotal = (openingCash >= 0 ? openingCash : 0) + totalDebit + (closingBalance < 0 ? Math.abs(closingBalance) : 0);
+  const reconciledCreditTotal = totalCredit + (closingBalance >= 0 ? closingBalance : 0) + (openingCash < 0 ? Math.abs(openingCash) : 0);
+
   return (
     <div className="p-3 sm:p-6 max-w-5xl mx-auto space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h1 className="font-display text-2xl uppercase tracking-tight">Cash Book</h1>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <h1 className="font-display text-2xl uppercase tracking-tight">Cash Book (روکڑ بہی)</h1>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-300">
+            ✓ Balanced (Dr = Cr: {formatPKR(reconciledDebitTotal)})
+          </span>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <input type="date" value={from} onChange={e => setFrom(e.target.value)}
             className="flex-1 sm:flex-initial border-2 border-black bg-white px-3 py-2 font-mono text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
@@ -183,7 +191,7 @@ export function CashBookPage() {
             <tr className="bg-amber-50/70 border-b-2 border-black/20 font-bold text-xs">
               <td className="px-4 py-2 whitespace-nowrap font-mono">{formatDate(from)}</td>
               <td className="px-4 py-2 font-mono text-gray-400">—</td>
-              <td className="px-4 py-2 uppercase tracking-wide text-amber-900">Opening Cash in Hand (Brought Forward)</td>
+              <td className="px-4 py-2 uppercase tracking-wide text-amber-900">To Opening Cash in Hand (Brought Forward)</td>
               <td className="px-4 py-2 text-right font-mono text-green-700">{openingCash >= 0 ? formatNumber(openingCash) : '—'}</td>
               <td className="px-4 py-2 text-right font-mono text-red-600">{openingCash < 0 ? formatNumber(Math.abs(openingCash)) : '—'}</td>
               <td className={`px-4 py-2 text-right font-mono ${openingCash >= 0 ? 'text-green-700' : 'text-red-600'}`}>
@@ -209,13 +217,41 @@ export function CashBookPage() {
               <tr><td colSpan={6} className="text-center py-6 text-gray-400 text-sm font-mono">No cash transactions in this period</td></tr>
             )}
           </tbody>
-          <tfoot className="bg-black text-white border-t-2 border-black font-bold">
-            <tr>
-              <td colSpan={3} className="px-4 py-2.5 uppercase text-right text-sm">Totals & Closing Balance</td>
-              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totalDebit)}</td>
-              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">{formatNumber(totalCredit)}</td>
-              <td className="px-4 py-2.5 text-right font-mono whitespace-nowrap">
+          <tfoot className="border-t-2 border-black font-bold">
+            {/* 1. Period Movement Subtotals */}
+            <tr className="bg-gray-100 text-gray-800 text-xs border-b border-black/20">
+              <td colSpan={3} className="px-4 py-2 uppercase text-right">Period Movement Subtotal</td>
+              <td className="px-4 py-2 text-right font-mono text-green-700 whitespace-nowrap">{formatNumber(totalDebit)}</td>
+              <td className="px-4 py-2 text-right font-mono text-red-600 whitespace-nowrap">{formatNumber(totalCredit)}</td>
+              <td className="px-4 py-2 text-right font-mono text-gray-500 whitespace-nowrap">—</td>
+            </tr>
+            {/* 2. Carried Forward Closing Cash Balance */}
+            <tr className="bg-amber-50/80 text-amber-950 text-xs border-b border-black/20">
+              <td colSpan={3} className="px-4 py-2 uppercase text-right">By Closing Balance (Carried Forward C/F)</td>
+              <td className="px-4 py-2 text-right font-mono whitespace-nowrap">
+                {closingBalance < 0 ? formatNumber(Math.abs(closingBalance)) : '—'}
+              </td>
+              <td className="px-4 py-2 text-right font-mono whitespace-nowrap">
+                {closingBalance >= 0 ? formatNumber(closingBalance) : '—'}
+              </td>
+              <td className="px-4 py-2 text-right font-mono whitespace-nowrap">
                 {formatNumber(Math.abs(closingBalance))} {closingBalance >= 0 ? 'Dr' : 'Cr'}
+              </td>
+            </tr>
+            {/* 3. Reconciled Total (Debit = Credit) */}
+            <tr className="bg-black text-white text-sm">
+              <td colSpan={3} className="px-4 py-2.5 uppercase text-right flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono text-emerald-400 font-normal">
+                    Reconciled: Opening + Receipts (Dr) = Payments + Closing (Cr)
+                  </span>
+                  <span>Total Debit & Credit</span>
+                </div>
+              </td>
+              <td className="px-4 py-2.5 text-right font-mono text-emerald-400 whitespace-nowrap">{formatNumber(reconciledDebitTotal)}</td>
+              <td className="px-4 py-2.5 text-right font-mono text-emerald-400 whitespace-nowrap">{formatNumber(reconciledCreditTotal)}</td>
+              <td className="px-4 py-2.5 text-right font-mono text-xs text-emerald-400 uppercase whitespace-nowrap">
+                ✓ BALANCED
               </td>
             </tr>
           </tfoot>

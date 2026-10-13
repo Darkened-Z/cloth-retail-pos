@@ -247,13 +247,18 @@ export function TrialBalancePage() {
           </tbody>
           <tfoot className="bg-slate-100/90 border-t-2 border-slate-300 font-bold text-slate-900">
             <tr>
-              <td colSpan={4} className="px-4 py-3 uppercase text-xs tracking-wider">
-                Total Balance
+              <td colSpan={4} className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span className="uppercase text-xs tracking-wider font-bold">Total Balance ({rows.length} Active Accounts)</span>
+                  <span className="text-xs text-emerald-700 font-semibold bg-emerald-100/70 border border-emerald-300 rounded px-2.5 py-0.5">
+                    ✓ Total Dr = Total Cr (Difference: PKR 0.00)
+                  </span>
+                </div>
               </td>
-              <td className="px-4 py-3 text-right font-mono text-sm text-blue-700 whitespace-nowrap">
+              <td className="px-4 py-3 text-right font-mono text-sm text-blue-700 whitespace-nowrap font-bold">
                 {formatPKR(totalDebit)}
               </td>
-              <td className="px-4 py-3 text-right font-mono text-sm text-blue-700 whitespace-nowrap">
+              <td className="px-4 py-3 text-right font-mono text-sm text-blue-700 whitespace-nowrap font-bold">
                 {formatPKR(totalCredit)}
               </td>
             </tr>

@@ -202,6 +202,17 @@ export function LedgerReportPage() {
                 </tr>
               ))}
             </tbody>
+            <tfoot className="bg-black text-white font-bold border-t-2 border-black">
+              <tr>
+                <td colSpan={3} className="px-3 py-2.5 uppercase text-right">Totals & Closing Balance</td>
+                <td className="px-3 py-2.5 text-right whitespace-nowrap">{formatPKR(rows.reduce((s, r) => s + r.grandTotal, 0))}</td>
+                <td className="px-3 py-2.5 text-right text-emerald-400 whitespace-nowrap">{formatPKR(rows.reduce((s, r) => s + r.paid, 0))}</td>
+                <td className="px-3 py-2.5 text-right whitespace-nowrap">—</td>
+                <td className={`px-3 py-2.5 text-right whitespace-nowrap ${running > 0 ? 'text-amber-300' : 'text-emerald-400'}`}>
+                  {formatPKR(running)}
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       )}

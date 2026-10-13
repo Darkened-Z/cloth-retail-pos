@@ -168,6 +168,16 @@ export function SupplierLedgerPage() {
               </tr>
             ))}
           </tbody>
+          <tfoot className="bg-black text-white font-bold border-t-2 border-black">
+            <tr>
+              <td colSpan={4} className="px-3 py-2.5 uppercase text-right">Totals & Closing Balance</td>
+              <td className="px-3 py-2.5 text-right whitespace-nowrap">{formatPKR(totalBilled)}</td>
+              <td className="px-3 py-2.5 text-right text-emerald-400 whitespace-nowrap">{formatPKR(totalPaid)}</td>
+              <td className={`px-3 py-2.5 text-right whitespace-nowrap ${party.currentBalance > 0 ? 'text-amber-300' : 'text-emerald-400'}`}>
+                {formatPKR(party.currentBalance)}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
