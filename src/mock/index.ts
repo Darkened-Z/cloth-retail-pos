@@ -66,9 +66,10 @@ export function seedAll() {
     }
     storage.set('lang_clean_v1', true);
   }
-  if (!storage.get('tb_balanced_v4')) {
+  if (!storage.get('tb_balanced_v5')) {
     storage.set('accounts', mockAccounts);
-    storage.set('tb_balanced_v4', true);
+    storage.set('parties', mockParties);
+    storage.set('tb_balanced_v5', true);
   }
 }
 

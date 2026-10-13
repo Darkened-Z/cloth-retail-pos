@@ -31,13 +31,13 @@ export const mockAccountSubs: AccountSub[] = [
 ];
 
 export const mockAccounts: Account[] = [
-  { id: 'A100', subId: 'AS10', name: "Owner's Capital",        openingBalance: 4500000, currentBalance: 4500000 },
-  { id: 'A200', subId: 'AS20', name: 'Trade Creditors',       openingBalance: 160000,  currentBalance: 160000 },
-  { id: 'A210', subId: 'AS21', name: 'Accrued Rent',          openingBalance: 0,       currentBalance: 0 },
+  { id: 'A100', subId: 'AS10', name: "Owner's Capital",        openingBalance: 5340000, currentBalance: 5340000 },
+  { id: 'A200', subId: 'AS20', name: 'Trade Creditors',       openingBalance: 650000,  currentBalance: 650000 },
+  { id: 'A210', subId: 'AS21', name: 'Accrued Rent',          openingBalance: 70000,   currentBalance: 70000 },
   { id: 'A300', subId: 'AS30', name: 'Bank Loan',             openingBalance: 300000,  currentBalance: 300000 },
   { id: 'A400', subId: 'AS40', name: 'Trade Debtors',         openingBalance: 1135000, currentBalance: 1135000 },
   { id: 'A410', subId: 'AS41', name: 'Cash in Hand',          openingBalance: 125000,  currentBalance: 125000 },
-  { id: 'A411', subId: 'AS41', name: 'Bank — HBL',            openingBalance: 450000,  currentBalance: 450000 },
+  { id: 'A411', subId: 'AS41', name: 'Bank — HBL',            openingBalance: 1850000, currentBalance: 1850000 },
   { id: 'A420', subId: 'AS42', name: 'Fabric Stock',          openingBalance: 3000000, currentBalance: 3000000 },
   { id: 'A500', subId: 'AS50', name: 'Furniture & Fixtures',  openingBalance: 150000,  currentBalance: 150000 },
   { id: 'A501', subId: 'AS50', name: 'Computer & Equipment',  openingBalance: 100000,  currentBalance: 100000 },
