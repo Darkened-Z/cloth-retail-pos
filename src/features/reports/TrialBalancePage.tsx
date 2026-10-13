@@ -47,8 +47,8 @@ export function TrialBalancePage() {
     // Sales: Credit Revenue (A600), Debit Cash (A410) & Debtors (A400)
     invoices.forEach(inv => {
       addCr('A600', inv.grandTotal);
-      const paid = inv.paid ?? (inv.paymentMode === 'cash' ? inv.grandTotal : 0);
-      const balance = inv.balance ?? (inv.paymentMode === 'credit' ? inv.grandTotal : Math.max(0, inv.grandTotal - paid));
+      const paid = Math.min(inv.grandTotal, Math.max(0, inv.paid ?? (inv.paymentMode === 'cash' ? inv.grandTotal : 0)));
+      const balance = inv.grandTotal - paid;
       if (paid > 0) addDr('A410', paid);
       if (balance > 0) addDr('A400', balance);
     });
@@ -56,8 +56,8 @@ export function TrialBalancePage() {
     // Purchases: Debit Purchases (A700), Credit Cash (A410) & Creditors (A200)
     purchases.forEach(p => {
       addDr('A700', p.grandTotal);
-      const paid = p.paid ?? (p.paymentMode === 'cash' ? p.grandTotal : 0);
-      const balance = p.balance ?? (p.paymentMode === 'credit' ? p.grandTotal : Math.max(0, p.grandTotal - paid));
+      const paid = Math.min(p.grandTotal, Math.max(0, p.paid ?? (p.paymentMode === 'cash' ? p.grandTotal : 0)));
+      const balance = p.grandTotal - paid;
       if (paid > 0) addCr('A410', paid);
       if (balance > 0) addCr('A200', balance);
     });
@@ -65,8 +65,8 @@ export function TrialBalancePage() {
     // Dyeing: Debit Dyeing Charges (A710), Credit Cash (A410) & Dyers/Creditors (A200)
     dyeings.forEach(d => {
       addDr('A710', d.totalValue);
-      const paid = d.paid ?? (d.paymentMode === 'cash' ? d.totalValue : 0);
-      const balance = d.balance ?? (d.paymentMode === 'credit' || !d.paymentMode ? d.totalValue : Math.max(0, d.totalValue - paid));
+      const paid = Math.min(d.totalValue, Math.max(0, d.paid ?? (d.paymentMode === 'cash' ? d.totalValue : 0)));
+      const balance = d.totalValue - paid;
       if (paid > 0) addCr('A410', paid);
       if (balance > 0) addCr('A200', balance);
     });

@@ -79,8 +79,8 @@ export function GeneralJournalPage() {
     // 1. Sales Invoices
     invoices.forEach(inv => {
       const custName = partyMap.get(inv.customerId) ?? inv.customerId;
-      const paid = inv.paid ?? (inv.paymentMode === 'cash' ? inv.grandTotal : 0);
-      const balance = inv.balance ?? (inv.paymentMode === 'credit' ? inv.grandTotal : Math.max(0, inv.grandTotal - paid));
+      const paid = Math.min(inv.grandTotal, Math.max(0, inv.paid ?? (inv.paymentMode === 'cash' ? inv.grandTotal : 0)));
+      const balance = inv.grandTotal - paid;
 
       const lines: JournalEntryLine[] = [];
       if (paid > 0) {
@@ -129,8 +129,8 @@ export function GeneralJournalPage() {
     // 2. Purchase Vouchers
     purchases.forEach(p => {
       const suppName = partyMap.get(p.supplierId) ?? p.supplierId;
-      const paid = p.paid ?? (p.paymentMode === 'cash' ? p.grandTotal : 0);
-      const balance = p.balance ?? (p.paymentMode === 'credit' ? p.grandTotal : Math.max(0, p.grandTotal - paid));
+      const paid = Math.min(p.grandTotal, Math.max(0, p.paid ?? (p.paymentMode === 'cash' ? p.grandTotal : 0)));
+      const balance = p.grandTotal - paid;
 
       const lines: JournalEntryLine[] = [
         {
@@ -180,8 +180,8 @@ export function GeneralJournalPage() {
     // 3. Dyeing Vouchers
     dyeings.forEach(d => {
       const dyerName = partyMap.get(d.dyerId) ?? d.dyerId;
-      const paid = d.paid ?? (d.paymentMode === 'cash' ? d.totalValue : 0);
-      const balance = d.balance ?? (d.paymentMode === 'credit' || !d.paymentMode ? d.totalValue : Math.max(0, d.totalValue - paid));
+      const paid = Math.min(d.totalValue, Math.max(0, d.paid ?? (d.paymentMode === 'cash' ? d.totalValue : 0)));
+      const balance = d.totalValue - paid;
 
       const lines: JournalEntryLine[] = [
         {

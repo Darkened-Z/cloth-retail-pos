@@ -1,5 +1,5 @@
 -- ============================================================
--- Hafiz Fabrics POS — Supabase Schema & Permissions
+-- Hafiz Fabrics POS — Supabase Schema & RLS Policy
 -- Run this in: Supabase Dashboard → SQL Editor → New query
 -- ============================================================
 
@@ -9,19 +9,15 @@ CREATE TABLE IF NOT EXISTS public.app_data (
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Grant full table permissions to API roles
 GRANT ALL ON TABLE public.app_data TO anon, authenticated, service_role;
 
--- Allow public read/write policy (works even if RLS is enabled)
-DROP POLICY IF EXISTS "Allow all access to app_data" ON public.app_data;
-CREATE POLICY "Allow all access to app_data"
-  ON public.app_data
-  FOR ALL
-  TO anon, authenticated
-  USING (true)
-  WITH CHECK (true);
+ALTER TABLE public.app_data ENABLE ROW LEVEL SECURITY;
 
--- Disable Row Level Security for frictionless sync
-ALTER TABLE public.app_data DISABLE ROW LEVEL SECURITY;
+CREATE POLICY "pos_sync_policy"
+ON public.app_data
+FOR ALL
+TO anon, authenticated
+USING (true)
+WITH CHECK (true);
 
 CREATE INDEX IF NOT EXISTS idx_app_data_updated ON public.app_data (updated_at DESC);
