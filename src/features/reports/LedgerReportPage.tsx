@@ -84,6 +84,7 @@ export function LedgerReportPage() {
     }
 
     receipts.filter(r => r.partyId === party.id).forEach(rv => {
+      const net = party.type === 'customer' ? -rv.amount : rv.amount;
       rawRows.push({
         id: rv.id,
         date: rv.date,
@@ -91,11 +92,12 @@ export function LedgerReportPage() {
         serial: rv.serial,
         grandTotal: 0,
         paid: rv.amount,
-        balance: -rv.amount,
+        balance: net,
       });
     });
 
     payments.filter(p => p.partyId === party.id).forEach(pv => {
+      const net = party.type === 'customer' ? pv.amount : -pv.amount;
       rawRows.push({
         id: pv.id,
         date: pv.date,
@@ -103,7 +105,7 @@ export function LedgerReportPage() {
         serial: pv.serial,
         grandTotal: 0,
         paid: pv.amount,
-        balance: -pv.amount,
+        balance: net,
       });
     });
   }

@@ -30,9 +30,13 @@ export function DebtorsReportPage() {
 
   // Debtors: customers with outstanding balance
   const debtorRows = customers.map(c => {
-    const totalSales = invoices.filter(inv => inv.customerId === c.id).reduce((s, inv) => s + inv.grandTotal, 0);
-    const totalReceipts = receipts.filter(r => r.partyId === c.id).reduce((s, r) => s + r.amount, 0);
-    const balance = c.openingBalance + totalSales - totalReceipts;
+    const custInvoices = invoices.filter(inv => inv.customerId === c.id);
+    const totalSales = custInvoices.reduce((s, inv) => s + inv.grandTotal, 0);
+    const invoicePaid = custInvoices.reduce((s, inv) => s + (inv.paid ?? (inv.paymentMode === 'cash' ? inv.grandTotal : 0)), 0);
+    const separateReceipts = receipts.filter(r => r.partyId === c.id).reduce((s, r) => s + r.amount, 0);
+    const customerRefunds = payments.filter(p => p.partyId === c.id).reduce((s, p) => s + p.amount, 0);
+    const totalReceipts = invoicePaid + separateReceipts;
+    const balance = c.openingBalance + totalSales - totalReceipts + customerRefunds;
     return { ...c, totalSales, totalReceipts, balance };
   }).filter(c => c.balance !== 0).sort((a, b) => b.balance - a.balance);
 
