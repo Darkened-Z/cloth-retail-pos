@@ -40,25 +40,31 @@ export function TrialBalance4ColPage() {
   function addDr(id: string, amt: number) { movements[id] = { dr: (movements[id]?.dr ?? 0) + amt, cr: movements[id]?.cr ?? 0 }; }
   function addCr(id: string, amt: number) { movements[id] = { dr: movements[id]?.dr ?? 0, cr: (movements[id]?.cr ?? 0) + amt }; }
 
-  // Sales → Credit A600 (Fabric Sales), Debit A400 (Trade Debtors) or A410 (Cash)
+  // Sales → Credit A600 (Fabric Sales), Debit A410 (Cash) & A400 (Trade Debtors)
   invoices.forEach(inv => {
     addCr('A600', inv.grandTotal);
-    if (inv.paymentMode === 'cash') addDr('A410', inv.grandTotal);
-    else addDr('A400', inv.grandTotal);
+    const paid = inv.paid ?? (inv.paymentMode === 'cash' ? inv.grandTotal : 0);
+    const balance = inv.balance ?? (inv.paymentMode === 'credit' ? inv.grandTotal : Math.max(0, inv.grandTotal - paid));
+    if (paid > 0) addDr('A410', paid);
+    if (balance > 0) addDr('A400', balance);
   });
 
-  // Purchases → Debit A700, Credit A200 or A410
+  // Purchases → Debit A700 (Fabric Purchases), Credit A410 (Cash) & A200 (Trade Creditors)
   purchases.forEach(p => {
     addDr('A700', p.grandTotal);
-    if (p.paymentMode === 'cash') addCr('A410', p.grandTotal);
-    else addCr('A200', p.grandTotal);
+    const paid = p.paid ?? (p.paymentMode === 'cash' ? p.grandTotal : 0);
+    const balance = p.balance ?? (p.paymentMode === 'credit' ? p.grandTotal : Math.max(0, p.grandTotal - paid));
+    if (paid > 0) addCr('A410', paid);
+    if (balance > 0) addCr('A200', balance);
   });
 
-  // Dyeing → Debit A710 (Dyeing Charges), Credit A410 or A200
+  // Dyeing → Debit A710 (Dyeing Charges), Credit A410 (Cash) & A200 (Trade Creditors)
   dyeings.forEach(d => {
     addDr('A710', d.totalValue);
-    if (d.paymentMode === 'cash') addCr('A410', d.totalValue);
-    else addCr('A200', d.totalValue);
+    const paid = d.paid ?? (d.paymentMode === 'cash' ? d.totalValue : 0);
+    const balance = d.balance ?? (d.paymentMode === 'credit' || !d.paymentMode ? d.totalValue : Math.max(0, d.totalValue - paid));
+    if (paid > 0) addCr('A410', paid);
+    if (balance > 0) addCr('A200', balance);
   });
 
   // Expenses → Debit expense account, Credit A410 or A411
@@ -70,14 +76,14 @@ export function TrialBalance4ColPage() {
 
   // Receipts → Debit cash/bank, Credit A400
   receipts.forEach(r => {
-    const cashAcc = r.bankAccountId ?? 'A410';
+    const cashAcc = r.receivedIn === 'bank' && r.bankAccountId ? r.bankAccountId : 'A410';
     addDr(cashAcc, r.amount);
     addCr('A400', r.amount);
   });
 
   // Payments → Credit cash/bank, Debit A200
   payments.forEach(p => {
-    const cashAcc = p.bankAccountId ?? 'A410';
+    const cashAcc = p.paidFrom === 'bank' && p.bankAccountId ? p.bankAccountId : 'A410';
     addCr(cashAcc, p.amount);
     addDr('A200', p.amount);
   });
