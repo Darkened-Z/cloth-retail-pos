@@ -58,6 +58,7 @@ const APP_ROUTES: PaletteRoute[] = [
   { label: 'Attendance', category: 'HR', path: '/attendance' },
   { label: 'Payroll & Salary Slips', category: 'HR', path: '/payroll' },
   { label: 'Day Book', category: 'REPORTS', path: '/reports/daybook' },
+  { label: 'General Journal (روزنامچہ)', category: 'REPORTS', path: '/reports/general-journal' },
   { label: 'Cash Book', category: 'REPORTS', path: '/reports/cashbook' },
   { label: 'Party Ledger Report', category: 'REPORTS', path: '/reports/ledger' },
   { label: 'Trial Balance', category: 'REPORTS', path: '/reports/trial-balance' },
@@ -190,6 +191,7 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     bgColor: 'bg-purple-50',
     defaultPath: '/reports/daybook',
     children: [
+      { label: 'General Journal', path: '/reports/general-journal' },
       { label: 'Day Book', path: '/reports/daybook' },
       { label: 'Cash Book', path: '/reports/cashbook' },
       { label: 'Party Ledger', path: '/reports/ledger' },

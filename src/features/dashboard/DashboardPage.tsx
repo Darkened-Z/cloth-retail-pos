@@ -339,7 +339,9 @@ export function DashboardPage() {
       dotBg: 'bg-amber-50',
       dotColor: 'bg-amber-500',
       items: [
-        { label: 'Day Book Summary', path: '/reports/daybook', primary: true },
+        { label: 'General Journal (روزنامچہ)', path: '/reports/general-journal', primary: true },
+        { label: 'Day Book Summary', path: '/reports/daybook' },
+        { label: 'Trial Balance (میزان پڑتال)', path: '/reports/trial-balance', primary: true },
         { label: 'Cash Book', path: '/reports/cashbook' },
         { label: 'Fabric Stock Ledger', path: '/reports/stock' },
         { label: 'Party Ledger Report', path: '/reports/ledger' },

@@ -32,6 +32,7 @@ import { CashBookPage } from '@/features/reports/CashBookPage';
 import { StockReportPage } from '@/features/reports/StockReportPage';
 import { DebtorsReportPage } from '@/features/reports/DebtorsReportPage';
 import { TrialBalance4ColPage } from '@/features/reports/TrialBalance4ColPage';
+import { GeneralJournalPage } from '@/features/reports/GeneralJournalPage';
 import { ManageUsersPage } from '@/features/settings/ManageUsersPage';
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> });
@@ -74,6 +75,7 @@ const plRoute          = createRoute({ getParentRoute: () => shellRoute, path: '
 const cashBookRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/reports/cashbook',          component: CashBookPage });
 const stockReportRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/stock',             component: StockReportPage });
 const debtorsRoute     = createRoute({ getParentRoute: () => shellRoute, path: '/reports/debtors',           component: DebtorsReportPage });
+const generalJournalRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/general-journal', component: GeneralJournalPage });
 const settingsRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/settings',                  component: SettingsPage });
 const locationsRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/locations',                 component: LocationsPage });
 const stockTransferRoute = createRoute({ getParentRoute: () => shellRoute, path: '/stock-transfer',          component: StockTransferPage });
@@ -94,7 +96,7 @@ const routeTree = rootRoute.addChildren([
     locationsRoute, stockTransferRoute,
     receiptPayRoute, journalRoute,
     dayBookRoute, ledgerReportRoute, trialBalRoute, trialBal4Route, plRoute,
-    cashBookRoute, stockReportRoute, debtorsRoute,
+    cashBookRoute, stockReportRoute, debtorsRoute, generalJournalRoute,
     settingsRoute, manageUsersRoute,
   ]),
 ]);
