@@ -12,6 +12,9 @@ interface DyeingState {
 
 export const useDyeing = create<DyeingState>((set) => ({
   vouchers: (() => {
+    if (storage.get('empty_mode')) {
+      return storage.get<DyeingVoucher[]>('dyeingVouchers') ?? [];
+    }
     const saved = storage.get<DyeingVoucher[]>('dyeingVouchers');
     if (!saved || saved.length === 0 || saved[0]?.totalValue !== 6300) {
       storage.set('dyeingVouchers', mockDyeingVouchers);

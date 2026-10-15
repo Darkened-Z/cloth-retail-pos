@@ -34,6 +34,9 @@ export {
 };
 
 export function seedAll() {
+  if (storage.get('empty_mode')) {
+    return;
+  }
   if (!storage.get('seeded_v5')) {
     storage.set('shop', mockShop);
     storage.set('users', mockUsers);
@@ -79,11 +82,13 @@ export function resetAll() {
   storage.clear();
   if (sbCfg) localStorage.setItem('supabase_config_v1', sbCfg);
   if (curUser) localStorage.setItem('currentUser', curUser);
+  storage.remove('empty_mode');
   seedAll();
   window.location.reload();
 }
 
 export function startEmptyShop() {
+  storage.set('empty_mode', true);
   storage.set('accountMasters', mockAccountMasters);
   storage.set('accountSubs', mockAccountSubs);
   storage.set(
@@ -108,5 +113,6 @@ export function startEmptyShop() {
   storage.set('paymentVouchers', []);
   storage.set('journalVouchers', []);
   storage.set('seeded_v5', true);
+  storage.set('tb_balanced_v5', true);
   window.location.reload();
 }

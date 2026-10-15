@@ -101,7 +101,7 @@ export function DashboardPage() {
 
   const cashAccount = useMemo(() => {
     const acc = accounts.find(a => a.id === 'A410');
-    const baseBalance = acc?.currentBalance ?? acc?.openingBalance ?? 124500;
+    const baseBalance = acc?.currentBalance ?? acc?.openingBalance ?? 0;
     const today = todayISO();
     const todaySalesPaid = invoices
       .filter(i => i.date === today)

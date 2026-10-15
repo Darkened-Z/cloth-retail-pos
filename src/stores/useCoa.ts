@@ -22,6 +22,9 @@ export const useCoa = create<CoaState>((set) => ({
   masters: storage.get<AccountMaster[]>('accountMasters') ?? [],
   subs: storage.get<AccountSub[]>('accountSubs') ?? [],
   accounts: (() => {
+    if (storage.get('empty_mode')) {
+      return storage.get<Account[]>('accounts') ?? [];
+    }
     const saved = storage.get<Account[]>('accounts');
     if (!saved || saved.length === 0 || !saved.some(a => a.id === 'A831') || saved.find(a => a.id === 'A100')?.openingBalance !== 5340000) {
       storage.set('accounts', mockAccounts);
