@@ -33,6 +33,8 @@ import { StockReportPage } from '@/features/reports/StockReportPage';
 import { DebtorsReportPage } from '@/features/reports/DebtorsReportPage';
 import { TrialBalance4ColPage } from '@/features/reports/TrialBalance4ColPage';
 import { GeneralJournalPage } from '@/features/reports/GeneralJournalPage';
+import { SalesReportPage } from '@/features/reports/SalesReportPage';
+import { PurchaseReportPage } from '@/features/reports/PurchaseReportPage';
 import { ManageUsersPage } from '@/features/settings/ManageUsersPage';
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> });
@@ -76,6 +78,8 @@ const cashBookRoute    = createRoute({ getParentRoute: () => shellRoute, path: '
 const stockReportRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/stock',             component: StockReportPage });
 const debtorsRoute     = createRoute({ getParentRoute: () => shellRoute, path: '/reports/debtors',           component: DebtorsReportPage });
 const generalJournalRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/general-journal', component: GeneralJournalPage });
+const salesReportRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/reports/sales-report',     component: SalesReportPage });
+const purchaseReportRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/purchase-report',  component: PurchaseReportPage });
 const settingsRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/settings',                  component: SettingsPage });
 const locationsRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/locations',                 component: LocationsPage });
 const stockTransferRoute = createRoute({ getParentRoute: () => shellRoute, path: '/stock-transfer',          component: StockTransferPage });
@@ -97,6 +101,7 @@ const routeTree = rootRoute.addChildren([
     receiptPayRoute, journalRoute,
     dayBookRoute, ledgerReportRoute, trialBalRoute, trialBal4Route, plRoute,
     cashBookRoute, stockReportRoute, debtorsRoute, generalJournalRoute,
+    salesReportRoute, purchaseReportRoute,
     settingsRoute, manageUsersRoute,
   ]),
 ]);

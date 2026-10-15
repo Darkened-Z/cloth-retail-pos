@@ -42,6 +42,9 @@ export const NAV_ITEMS: NavItem[] = [
   { key: 'reports', icon: BarChart3, children: [
     { key: 'dayBook', path: '/reports/daybook' },
     { key: 'cashBook', path: '/reports/cashbook' },
+    { key: 'generalJournal', path: '/reports/general-journal' },
+    { key: 'salesReport', path: '/reports/sales-report' },
+    { key: 'purchaseReport', path: '/reports/purchase-report' },
     { key: 'ledger', path: '/reports/ledger' },
     { key: 'trialBalance', path: '/reports/trial-balance' },
     { key: 'trialBalance4Col', path: '/reports/trial-balance-4col' },

@@ -30,6 +30,7 @@ const EN: Record<string, string> = {
   locations: 'Locations', stockTransfer: 'Stock Transfer', receiptPayment: 'Receipt / Payment',
   journalVoucher: 'Journal Voucher', cashBook: 'Cash Book', stockReport: 'Stock / Item Ledger',
   debtorsReport: 'Debtors Report', trialBalance4Col: 'Trial Balance 4-Col',
+  generalJournal: 'General Journal', salesReport: 'Sales Report', purchaseReport: 'Purchase Report',
   shopSettings: 'Shop Settings', manageUsers: 'Manage Users', suppliersDyers: 'Suppliers & Dyers',
 };
 
@@ -65,6 +66,7 @@ const UR: Record<string, string> = {
   locations: 'مقامات', stockTransfer: 'اسٹاک منتقلی', receiptPayment: 'وصولی / ادائیگی',
   journalVoucher: 'جرنل واؤچر', cashBook: 'کیش بک', stockReport: 'اسٹاک کھاتہ',
   debtorsReport: 'قرض خواہ رپورٹ', trialBalance4Col: '4 کالم آزمائشی توازن',
+  generalJournal: 'جنرل جرنل', salesReport: 'فروخت رپورٹ', purchaseReport: 'خریداری رپورٹ',
   shopSettings: 'دکان کی ترتیبات', manageUsers: 'صارفین کا انتظام', suppliersDyers: 'سپلائرز اور ڈائرز',
 };
 

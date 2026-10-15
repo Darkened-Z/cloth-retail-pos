@@ -59,6 +59,8 @@ const APP_ROUTES: PaletteRoute[] = [
   { label: 'Payroll & Salary Slips', category: 'HR', path: '/payroll' },
   { label: 'Day Book', category: 'REPORTS', path: '/reports/daybook' },
   { label: 'General Journal (روزنامچہ)', category: 'REPORTS', path: '/reports/general-journal' },
+  { label: 'Sales Report (Datewise / Partywise / Itemwise)', category: 'REPORTS', path: '/reports/sales-report' },
+  { label: 'Purchase Report (Datewise / Partywise / Itemwise)', category: 'REPORTS', path: '/reports/purchase-report' },
   { label: 'Cash Book', category: 'REPORTS', path: '/reports/cashbook' },
   { label: 'Party Ledger Report', category: 'REPORTS', path: '/reports/ledger' },
   { label: 'Trial Balance', category: 'REPORTS', path: '/reports/trial-balance' },
@@ -126,6 +128,7 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     children: [
       { label: 'Sales Invoices', path: '/sales' },
       { label: '+ New Sales Invoice', path: '/sales/new' },
+      { label: 'Sales Report (3-Way)', path: '/reports/sales-report' },
       { label: 'Customers', path: '/customers' },
       { label: 'Debtors Report', path: '/reports/debtors' },
     ],
@@ -140,6 +143,7 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     children: [
       { label: 'Purchase Vouchers', path: '/purchase' },
       { label: '+ New Purchase', path: '/purchase/new' },
+      { label: 'Purchase Report (3-Way)', path: '/reports/purchase-report' },
       { label: 'Suppliers & Dyers', path: '/suppliers' },
     ],
   },
@@ -191,6 +195,8 @@ const SIDEBAR_MODULES: SidebarModule[] = [
     bgColor: 'bg-purple-50',
     defaultPath: '/reports/daybook',
     children: [
+      { label: 'Sales Report (Date/Party/Item)', path: '/reports/sales-report' },
+      { label: 'Purchase Report (Date/Party/Item)', path: '/reports/purchase-report' },
       { label: 'General Journal', path: '/reports/general-journal' },
       { label: 'Day Book', path: '/reports/daybook' },
       { label: 'Cash Book', path: '/reports/cashbook' },
