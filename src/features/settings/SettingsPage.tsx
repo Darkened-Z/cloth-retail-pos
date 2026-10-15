@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import { useShop } from '@/stores/useShop';
 import { setLang } from '@/lib/i18n';
 import { useKeyboardShortcuts } from '@/lib/shortcuts';
-import { resetAll, startEmptyShop } from '@/mock';
 import { exportBackupJson, importBackupJson } from '@/lib/supabase';
 import { Upload, Download, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -40,22 +39,6 @@ export function SettingsPage() {
       setBackupMsg({ type: 'error', text: `Invalid backup file: ${err?.message || 'Could not read file'}` });
     } finally {
       e.target.value = '';
-    }
-  }
-
-  function handleReset() {
-    if (confirm('This will clear all data and re-seed demo data. Continue?')) {
-      resetAll();
-    }
-  }
-
-  function handleStartEmpty() {
-    if (
-      confirm(
-        'Start Fresh Shop? This keeps Chart of Accounts, Locations, Users & Shop Info, and clears all demo invoices, vouchers, items, and parties.'
-      )
-    ) {
-      startEmptyShop();
     }
   }
 
@@ -159,32 +142,6 @@ export function SettingsPage() {
               onChange={handleImportFile}
               className="hidden"
             />
-          </div>
-        </div>
-      </div>
-
-      {/* DANGER ZONE */}
-      <div className="bg-white border-2 border-danger shadow-brutal">
-        <div className="border-b-2 border-danger px-4 py-3 font-display text-base text-danger bg-danger/5">
-          SYSTEM RESET
-        </div>
-        <div className="p-4 sm:p-6 space-y-4">
-          <p className="text-sm text-gray-700">
-            <strong>Reset to Demo Data</strong> restores the sample dataset. <strong>Start Empty Shop</strong> clears all demo invoices, vouchers, items, and parties while keeping your Chart of Accounts and Shop Info ready for live business entry.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={handleReset}
-              className="w-full sm:w-auto border-2 border-danger bg-white text-danger px-5 py-2.5 font-bold text-sm font-mono uppercase brutal-press hover:bg-danger hover:text-white"
-            >
-              RESET TO DEMO DATA
-            </button>
-            <button
-              onClick={handleStartEmpty}
-              className="w-full sm:w-auto border-2 border-black bg-white text-black px-5 py-2.5 font-bold text-sm font-mono uppercase brutal-press hover:bg-black hover:text-white"
-            >
-              START EMPTY SHOP (CLEAR DEMO DATA)
-            </button>
           </div>
         </div>
       </div>
