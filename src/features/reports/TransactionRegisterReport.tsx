@@ -29,6 +29,7 @@ interface Props {
   parties: Party[];
   items: Item[];
   shop: Shop;
+  initialViewMode?: ReportViewMode;
 }
 
 function formatDDMMYYYY(isoDate: string): string {
@@ -44,7 +45,7 @@ function formatDec2(val: number): string {
   return Number(val || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-export function TransactionRegisterReport({ title, mode, lines, parties, items, shop }: Props) {
+export function TransactionRegisterReport({ title, mode, lines, parties, items, shop, initialViewMode = 'datewise' }: Props) {
   const today = new Date().toISOString().slice(0, 10);
   const defaultFrom = (() => {
     const d = new Date();
@@ -54,7 +55,7 @@ export function TransactionRegisterReport({ title, mode, lines, parties, items, 
 
   const [from, setFrom] = useState(defaultFrom);
   const [to, setTo] = useState(today);
-  const [viewMode, setViewMode] = useState<ReportViewMode>('datewise');
+  const [viewMode, setViewMode] = useState<ReportViewMode>(initialViewMode);
   const [partyFilter, setPartyFilter] = useState('');
   const [itemFilter, setItemFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');

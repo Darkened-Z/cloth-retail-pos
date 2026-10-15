@@ -31,6 +31,8 @@ const EN: Record<string, string> = {
   journalVoucher: 'Journal Voucher', cashBook: 'Cash Book', stockReport: 'Stock / Item Ledger',
   debtorsReport: 'Debtors Report', trialBalance4Col: 'Trial Balance 4-Col',
   generalJournal: 'General Journal', salesReport: 'Sales Report', purchaseReport: 'Purchase Report',
+  salesReportDatewise: 'Sales Report Datewise', salesReportPartywise: 'Sales Report Partywise', salesReportItemwise: 'Sales Report Itemwise',
+  purchaseReportDatewise: 'Purchase Report Datewise', purchaseReportPartywise: 'Purchase Report Partywise', purchaseReportItemwise: 'Purchase Report Itemwise',
   shopSettings: 'Shop Settings', manageUsers: 'Manage Users', suppliersDyers: 'Suppliers & Dyers',
 };
 
@@ -67,6 +69,8 @@ const UR: Record<string, string> = {
   journalVoucher: 'جرنل واؤچر', cashBook: 'کیش بک', stockReport: 'اسٹاک کھاتہ',
   debtorsReport: 'قرض خواہ رپورٹ', trialBalance4Col: '4 کالم آزمائشی توازن',
   generalJournal: 'جنرل جرنل', salesReport: 'فروخت رپورٹ', purchaseReport: 'خریداری رپورٹ',
+  salesReportDatewise: 'فروخت رپورٹ تاریخ وار', salesReportPartywise: 'فروخت رپورٹ کھاتہ دار وار', salesReportItemwise: 'فروخت رپورٹ آئٹم وار',
+  purchaseReportDatewise: 'خریداری رپورٹ تاریخ وار', purchaseReportPartywise: 'خریداری رپورٹ کھاتہ دار وار', purchaseReportItemwise: 'خریداری رپورٹ آئٹم وار',
   shopSettings: 'دکان کی ترتیبات', manageUsers: 'صارفین کا انتظام', suppliersDyers: 'سپلائرز اور ڈائرز',
 };
 

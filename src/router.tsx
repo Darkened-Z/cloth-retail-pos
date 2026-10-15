@@ -33,8 +33,18 @@ import { StockReportPage } from '@/features/reports/StockReportPage';
 import { DebtorsReportPage } from '@/features/reports/DebtorsReportPage';
 import { TrialBalance4ColPage } from '@/features/reports/TrialBalance4ColPage';
 import { GeneralJournalPage } from '@/features/reports/GeneralJournalPage';
-import { SalesReportPage } from '@/features/reports/SalesReportPage';
-import { PurchaseReportPage } from '@/features/reports/PurchaseReportPage';
+import {
+  SalesReportPage,
+  SalesReportDatewisePage,
+  SalesReportPartywisePage,
+  SalesReportItemwisePage,
+} from '@/features/reports/SalesReportPage';
+import {
+  PurchaseReportPage,
+  PurchaseReportDatewisePage,
+  PurchaseReportPartywisePage,
+  PurchaseReportItemwisePage,
+} from '@/features/reports/PurchaseReportPage';
 import { ManageUsersPage } from '@/features/settings/ManageUsersPage';
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> });
@@ -78,8 +88,17 @@ const cashBookRoute    = createRoute({ getParentRoute: () => shellRoute, path: '
 const stockReportRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/stock',             component: StockReportPage });
 const debtorsRoute     = createRoute({ getParentRoute: () => shellRoute, path: '/reports/debtors',           component: DebtorsReportPage });
 const generalJournalRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/general-journal', component: GeneralJournalPage });
-const salesReportRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/reports/sales-report',     component: SalesReportPage });
-const purchaseReportRoute = createRoute({ getParentRoute: () => shellRoute, path: '/reports/purchase-report',  component: PurchaseReportPage });
+
+const salesReportRoute         = createRoute({ getParentRoute: () => shellRoute, path: '/reports/sales-report',     component: SalesReportPage });
+const salesDatewiseRoute       = createRoute({ getParentRoute: () => shellRoute, path: '/reports/sales-datewise',    component: SalesReportDatewisePage });
+const salesPartywiseRoute      = createRoute({ getParentRoute: () => shellRoute, path: '/reports/sales-partywise',   component: SalesReportPartywisePage });
+const salesItemwiseRoute       = createRoute({ getParentRoute: () => shellRoute, path: '/reports/sales-itemwise',    component: SalesReportItemwisePage });
+
+const purchaseReportRoute      = createRoute({ getParentRoute: () => shellRoute, path: '/reports/purchase-report',  component: PurchaseReportPage });
+const purchaseDatewiseRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/reports/purchase-datewise', component: PurchaseReportDatewisePage });
+const purchasePartywiseRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/reports/purchase-partywise',component: PurchaseReportPartywisePage });
+const purchaseItemwiseRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/reports/purchase-itemwise', component: PurchaseReportItemwisePage });
+
 const settingsRoute    = createRoute({ getParentRoute: () => shellRoute, path: '/settings',                  component: SettingsPage });
 const locationsRoute   = createRoute({ getParentRoute: () => shellRoute, path: '/locations',                 component: LocationsPage });
 const stockTransferRoute = createRoute({ getParentRoute: () => shellRoute, path: '/stock-transfer',          component: StockTransferPage });
@@ -101,7 +120,8 @@ const routeTree = rootRoute.addChildren([
     receiptPayRoute, journalRoute,
     dayBookRoute, ledgerReportRoute, trialBalRoute, trialBal4Route, plRoute,
     cashBookRoute, stockReportRoute, debtorsRoute, generalJournalRoute,
-    salesReportRoute, purchaseReportRoute,
+    salesReportRoute, salesDatewiseRoute, salesPartywiseRoute, salesItemwiseRoute,
+    purchaseReportRoute, purchaseDatewiseRoute, purchasePartywiseRoute, purchaseItemwiseRoute,
     settingsRoute, manageUsersRoute,
   ]),
 ]);

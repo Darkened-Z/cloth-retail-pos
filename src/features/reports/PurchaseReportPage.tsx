@@ -6,9 +6,14 @@ import { useShop } from '@/stores/useShop';
 import {
   TransactionRegisterReport,
   type RegisterLineItem,
+  type ReportViewMode,
 } from './TransactionRegisterReport';
 
-export function PurchaseReportPage() {
+interface PurchaseReportPageProps {
+  viewMode?: ReportViewMode;
+}
+
+export function PurchaseReportPage({ viewMode }: PurchaseReportPageProps) {
   const { vouchers: purchases } = usePurchase();
   const { parties } = useParties();
   const { items } = useItems();
@@ -71,6 +76,19 @@ export function PurchaseReportPage() {
       parties={parties}
       items={items}
       shop={shop}
+      initialViewMode={viewMode}
     />
   );
+}
+
+export function PurchaseReportDatewisePage() {
+  return <PurchaseReportPage viewMode="datewise" />;
+}
+
+export function PurchaseReportPartywisePage() {
+  return <PurchaseReportPage viewMode="partywise" />;
+}
+
+export function PurchaseReportItemwisePage() {
+  return <PurchaseReportPage viewMode="itemwise" />;
 }

@@ -6,9 +6,14 @@ import { useShop } from '@/stores/useShop';
 import {
   TransactionRegisterReport,
   type RegisterLineItem,
+  type ReportViewMode,
 } from './TransactionRegisterReport';
 
-export function SalesReportPage() {
+interface SalesReportPageProps {
+  viewMode?: ReportViewMode;
+}
+
+export function SalesReportPage({ viewMode }: SalesReportPageProps) {
   const { invoices } = useInvoices();
   const { parties } = useParties();
   const { items } = useItems();
@@ -28,7 +33,7 @@ export function SalesReportPage() {
         const item = itemMap.get(line.itemId);
         const itemName = item?.name ?? line.itemId;
         const lotNo = (line as unknown as { lotNo?: string }).lotNo ?? '';
-        
+
         // Compute than: use explicitly stored than if any, or compute from item unit/gazana
         let than = (line as unknown as { than?: number }).than;
         if (typeof than !== 'number' || isNaN(than)) {
@@ -71,6 +76,19 @@ export function SalesReportPage() {
       parties={parties}
       items={items}
       shop={shop}
+      initialViewMode={viewMode}
     />
   );
+}
+
+export function SalesReportDatewisePage() {
+  return <SalesReportPage viewMode="datewise" />;
+}
+
+export function SalesReportPartywisePage() {
+  return <SalesReportPage viewMode="partywise" />;
+}
+
+export function SalesReportItemwisePage() {
+  return <SalesReportPage viewMode="itemwise" />;
 }
